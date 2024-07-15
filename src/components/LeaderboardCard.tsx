@@ -55,10 +55,14 @@ const LeaderboardCard = (props: IProps) => {
       </div>
       <div
         style={{ backgroundColor: `${badgeColor[badgeType]}` }}
-        className="rounded-xl absolute flex gap-1 -bottom-3 left-1 justify-center items-center p-1 text-[#FFFFFF] text-sm"
+        className="absolute rounded-xl flex gap-1 -bottom-3 left-1 justify-center items-center p-1 text-[#FFFFFF] text-sm"
       >
         <img src={WhiteStarIcon} className="size-4" />
         <div>{appretiationPoint}</div>
+      </div>
+      <div className="absolute flex flex-col  -bottom-12 text-center">
+        <span className="text-xs">Shailendra</span>
+        <span className="text-xs">Kanherkar</span>
       </div>
     </li>
   );

@@ -25,7 +25,6 @@ const AppreciationCard = (props: IProps) => {
             className="h-full w-full object-cover rounded-full"
           />
         </div>
-        {/* <div className=" z-10 before:top-0 before:absolute before:-right-9 before:size-12 before:rounded-full  before:border-[#3069F6] before:border-2"></div> */}
         <div className="absolute -right-9 size-12 rounded-r-full rounded-t-full rounded-b-full bg-zinc-100">
           <div className="absolute top-0 left-0 w-full h-full border-2 border-solid border-transparent border-t-[#3069F6] rounded-[50%] transform rotate-[270deg]"></div>
           <img
@@ -35,7 +34,7 @@ const AppreciationCard = (props: IProps) => {
         </div>
       </div>
       {/* Info */}
-      <div className="flex flex-col mt-10 mb-12">
+      <div className="flex flex-col mt-10 mb-12 pl-3">
         <span className="text-sm text-[#151515] font-semibold">
           Mangesh Pawar
         </span>
