@@ -2,13 +2,13 @@ import "./App.css";
 import Login from "./login";
 import { ToastContainer } from "react-toastify";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./home";
+import Appreciations from "./appreciations";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: <Appreciations />,
     },
     {
       path: "/login",
