@@ -1,6 +1,10 @@
+import TemporaryDrawer from "../sideBar"
+
 const Home = () => {
     return(
-        <>home</>
+        <>
+        <TemporaryDrawer/>
+        home</>
     )
 }
 

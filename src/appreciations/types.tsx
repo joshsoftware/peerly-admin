@@ -1,3 +1,4 @@
+
 export interface appreciation {
   id: number;
   core_value_name: string;
@@ -55,4 +56,17 @@ export interface IPropsTable {
 
 export interface IPropsButtons{
     setFilter: (value: string | ((prevVar: string) => string)) => void;
+}
+
+export interface moderationReq{
+    moderator_comment: string
+    id: number
+    authToken: string
+}
+
+export interface moderationResponse {
+    success: boolean;
+    message: string;
+    status_code: number;
+    data: object;
 }

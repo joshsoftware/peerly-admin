@@ -17,14 +17,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
 import AppreciationToggleButton from "./toggleButton";
+import DeleteDialog from "./dialogeBox";
 
 interface Data {
   id: number;
   description: string;
   sender: string;
-  senderDesignation: string;
   receiver: string;
-  receiverDesignation: string;
   coreValue: string;
   rewardPoints: number;
   date: number;
@@ -40,9 +39,7 @@ function createData(
   id: number,
   description: string,
   sender: string,
-  senderDesignation: string,
   receiver: string,
-  receiverDesignation: string,
   coreValue: string,
   rewardPoints: number,
   date: number,
@@ -57,9 +54,7 @@ function createData(
     id,
     description,
     sender,
-    senderDesignation,
     receiver,
-    receiverDesignation,
     coreValue,
     rewardPoints,
     date,
@@ -162,6 +157,21 @@ const reportedColumns: HeadCell[] = [
     disablePadding: false,
     label: "Moderator Comment",
   },
+  {
+    id: "isValid",
+    numeric: false,
+    disablePadding: false,
+    label: "Delete",
+  },
+];
+
+const appreciationColumns: HeadCell[] = [
+  {
+    id: "date",
+    numeric: true,
+    disablePadding: false,
+    label: "Date",
+  },
 ];
 
 const DefaultCells: HeadCell[] = [
@@ -178,22 +188,10 @@ const DefaultCells: HeadCell[] = [
     label: "Appreciated By",
   },
   {
-    id: "senderDesignation",
-    numeric: false,
-    disablePadding: true,
-    label: "Sender Designation",
-  },
-  {
     id: "receiver",
     numeric: false,
     disablePadding: false,
     label: "Appreciation To",
-  },
-  {
-    id: "receiverDesignation",
-    numeric: false,
-    disablePadding: false,
-    label: "Receiver Designation",
   },
   {
     id: "coreValue",
@@ -207,12 +205,6 @@ const DefaultCells: HeadCell[] = [
     disablePadding: false,
     label: "Reward Points",
   },
-  {
-    id: "date",
-    numeric: true,
-    disablePadding: false,
-    label: "Date",
-  },
 ];
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -222,7 +214,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     setHeadCells(DefaultCells);
     if (props.filter === "reported") {
       reportedColumns?.forEach((item) => {
-        console.log("In reported columns map");
+        return setHeadCells((prevData) => [...prevData, item]);
+      });
+    } else {
+      appreciationColumns?.forEach((item) => {
         return setHeadCells((prevData) => [...prevData, item]);
       });
     }
@@ -239,7 +234,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.id == "description" ? "left" : "right"}
             padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -257,12 +252,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-
-        {props.filter === "reported" ? (
-          <TableCell align="right">Delete</TableCell>
-        ) : (
-          <TableCell></TableCell>
-        )}
       </TableRow>
     </TableHead>
   );
@@ -297,7 +286,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 export default function AppreciationTable(props: IPropsTable) {
-  const [order, setOrder] = useState<Order>("asc");
+  const [order, setOrder] = useState<Order>("desc");
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
@@ -306,6 +295,12 @@ export default function AppreciationTable(props: IPropsTable) {
 
   useEffect(() => {
     const data = props.response;
+    if(props.filter == "reported"){
+      setOrderBy("isValid")
+    }
+    else{
+      setOrderBy("date")
+    }
     setRows([]);
 
     data?.map((item) => {
@@ -318,19 +313,15 @@ export default function AppreciationTable(props: IPropsTable) {
         is_valid: item.is_valid === undefined ? true : item.is_valid,
       };
 
-      console.log("is_valid -> ", item.is_valid);
-
       return setRows((prevData) => [
         ...prevData,
         createData(
           updatedItem.id,
           updatedItem.description,
           updatedItem.sender_first_name + " " + updatedItem.sender_last_name,
-          updatedItem.sender_designation,
           updatedItem.receiver_first_name +
             " " +
             updatedItem.receiver_last_name,
-          updatedItem.receiver_designation,
           updatedItem.core_value_name,
           updatedItem.total_reward_points,
           updatedItem.created_at,
@@ -367,24 +358,12 @@ export default function AppreciationTable(props: IPropsTable) {
     setSelected([]);
   };
 
-  // const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-  //   const selectedIndex = selected.indexOf(id);
-  //   let newSelected: readonly number[] = [];
+  const [open, setOpen] = useState<boolean>(false);
 
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1)
-  //     );
-  //   }
-  //   setSelected(newSelected);
-  // };
+  const handleClickOpen = (id: number) => {
+    setId(id);
+    setOpen(true);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -397,7 +376,6 @@ export default function AppreciationTable(props: IPropsTable) {
     setPage(0);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -409,6 +387,8 @@ export default function AppreciationTable(props: IPropsTable) {
       ),
     [order, orderBy, page, rowsPerPage, rows]
   );
+
+  const [id, setId] = useState<number>(0);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -439,7 +419,6 @@ export default function AppreciationTable(props: IPropsTable) {
                 return (
                   <TableRow
                     hover
-                    // onClick={(event) => handleClick(event, row.id)}
                     tabIndex={-1}
                     key={row.id}
                     sx={{ cursor: "pointer" }}
@@ -453,18 +432,19 @@ export default function AppreciationTable(props: IPropsTable) {
                       {row.description}
                     </TableCell>
                     <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.senderDesignation}</TableCell>
                     <TableCell align="right">{row.receiver}</TableCell>
-                    <TableCell align="right">
-                      {row.receiverDesignation}
-                    </TableCell>
                     <TableCell align="right">{row.coreValue}</TableCell>
                     <TableCell align="right">{row.rewardPoints}</TableCell>
-                    <TableCell align="right">
-                      {row.date == undefined
-                        ? row.date
-                        : new Date(row.date).toLocaleString()}
-                    </TableCell>
+
+                    {props.filter === "appreciations" ? (
+                      <TableCell align="right">
+                        {row.date == undefined
+                          ? row.date
+                          : new Date(row.date).toLocaleString()}
+                      </TableCell>
+                    ) : (
+                      <></>
+                    )}
                     {props.filter === "reported" ? (
                       <>
                         <TableCell align="right">{row.reportedBy}</TableCell>
@@ -482,7 +462,7 @@ export default function AppreciationTable(props: IPropsTable) {
                         </TableCell>
                         {row.isValid ? (
                           <TableCell align="right" padding="checkbox">
-                            <IconButton>
+                            <IconButton onClick={() => handleClickOpen(row.id)}>
                               <DeleteIcon />
                             </IconButton>
                           </TableCell>
@@ -493,24 +473,6 @@ export default function AppreciationTable(props: IPropsTable) {
                     ) : (
                       <></>
                     )}
-                    {/* <TableCell align="right">{row.reportedBy}</TableCell>
-                    <TableCell align="right">{row.reportingComment}</TableCell>
-                    <TableCell align="right">
-                      {row.reportedAt == undefined
-                        ? row.reportedAt
-                        : new Date(row.reportedAt).toLocaleString()}
-                    </TableCell>
-                    <TableCell align="right">{row.moderatedBy}</TableCell>
-                    <TableCell align="right">{row.moderatorComment}</TableCell> */}
-                    {/* {row.isValid ? (
-                      <TableCell align="right" padding="checkbox">
-                        <IconButton>
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )} */}
                   </TableRow>
                 );
               })}
@@ -536,6 +498,7 @@ export default function AppreciationTable(props: IPropsTable) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <DeleteDialog open={open} setOpen={setOpen} id={id} />
     </Box>
   );
 }
