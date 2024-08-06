@@ -1,12 +1,13 @@
 import "./App.css";
 import Login from "./login";
 import { ToastContainer } from "react-toastify";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Appreciations from "./appreciations";
 import { useDispatch } from "react-redux";
 import { getAuthToken } from "./login/slice";
 import { useEffect } from "react";
 import Home from "./home";
+import Config from "./config";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
     {
       path: "/appreciations",
       element: <Appreciations />,
+    },
+    {
+      path: "/config",
+      element: <Config />,
     },
   ]);
 

@@ -4,7 +4,7 @@ import { moderationReq, moderationResponse, response } from "./types";
 export const appreciationSlice = createApi({
   reducerPath: "appreciationSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:33001",
+    baseUrl: "http://localhost:33001/peerly",
   }),
   tagTypes: ["appreciation", "reported", "moderation"],
   endpoints: (builder) => ({

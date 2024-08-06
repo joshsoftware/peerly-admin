@@ -16,6 +16,7 @@ import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import { useNavigate } from 'react-router-dom';
 import { getRoute } from './slice';
 import { useDispatch } from 'react-redux';
+import ViewSidebarIcon from '@mui/icons-material/ViewSidebar';
 
 export default function TemporaryDrawer() {
   const [open, setOpen] = React.useState(false);
@@ -26,7 +27,7 @@ export default function TemporaryDrawer() {
   };
 
   const iconList = [<DashboardIcon/>, <PostAddIcon/>, <LocalPoliceIcon/>, <DiamondIcon/>, <AssuredWorkloadIcon/>]
-  const routeList = ['/', '/appreciations', '/', '/', '/']
+  const routeList = ['/', '/appreciations', '/', '/', '/config']
   const dispatch = useDispatch();
   const setRoute = (index: number) => () => {
     dispatch(getRoute(routeList[index]));
@@ -56,7 +57,7 @@ export default function TemporaryDrawer() {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>
-        <MoreVertIcon/>
+        <ViewSidebarIcon/>
       </Button>
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
