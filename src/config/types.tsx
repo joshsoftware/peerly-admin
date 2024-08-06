@@ -34,3 +34,15 @@ export interface editRenewalFrequencyResp {
   status_code: number;
   data: orgConfig;
 }
+
+export interface editGradeReq {
+  id: number;
+  points: number;
+  authToken: string;
+}
+
+export interface editGradeResp {
+  success: string;
+  message: string;
+  status_code: number;
+}

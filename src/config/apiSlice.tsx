@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { editRenewalFrequencyReq, editRenewalFrequencyResp, gradesResponse, orgConfigResponse } from "./types";
+import { editGradeReq, editGradeResp, editRenewalFrequencyReq, editRenewalFrequencyResp, gradesResponse, orgConfigResponse } from "./types";
 
 export const configSlice = createApi({
   reducerPath: "configSlice",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:33001/peerly",
   }),
-  tagTypes: ["gradesConfig","orgConfig","editGrades"],
+  tagTypes: ["gradesConfig","orgConfig"],
   endpoints: (builder) => ({
     getGrades: builder.query<gradesResponse,{ authToken: string }>({
       query: ({ authToken }) => ({
@@ -43,11 +43,25 @@ export const configSlice = createApi({
       }),
       invalidatesTags: () => [{ type: "orgConfig" }],
     }),
+    editGrade: builder.mutation<editGradeResp,Partial<editGradeReq>>({
+      query: (payload) => ({
+        url: `/grades/${payload.id}`,
+        method: "PATCH",
+        body: { points: payload.points},
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "Accept-Version": "application/vnd.peerly.v1",
+          Authorization: `Bearer ${payload.authToken}`,
+        },
+      }),
+      invalidatesTags: () => [{ type: "gradesConfig" }],
+    }),
   }),
 });
 
 export const {
   useGetGradesQuery,
   useGetOrgConfigQuery,
-  useEditRenewalFrequencyMutation
+  useEditRenewalFrequencyMutation,
+  useEditGradeMutation
 } = configSlice;

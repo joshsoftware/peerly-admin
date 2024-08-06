@@ -8,14 +8,15 @@ import TextField from '@mui/material/TextField';
 import { toast } from 'react-toastify';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
-import { useEditRenewalFrequencyMutation } from '../apiSlice';
-import { editRenewalFrequencyReq } from '../types';
+import { useEditGradeMutation } from '../apiSlice';
+import { editGradeReq } from '../types';
 
 interface IProps {
     open: boolean;
     setOpen: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+    id: number;
 }
-export default function EditRenewalFreqDialog(props: IProps) {
+export default function EditGradeDialog(props: IProps) {
 
   const authToken = useSelector((state: RootState) => state.loginStore.authToken);
 
@@ -23,8 +24,7 @@ export default function EditRenewalFreqDialog(props: IProps) {
     props.setOpen(false);
   };
 
-  const [editRenewalFrequency] = useEditRenewalFrequencyMutation();
-
+  const [editGrade] = useEditGradeMutation();
 
   return (
     <React.Fragment>
@@ -36,39 +36,42 @@ export default function EditRenewalFreqDialog(props: IProps) {
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            console.log(formData)
             const formJson = Object.fromEntries((formData as any).entries());
-            const renewalFrequency = Number(formJson.renewal_frequency);
-            const req: editRenewalFrequencyReq = {
-                reward_quota_renewal_frequency: renewalFrequency,
+            const points = Number(formJson.points);
+            const req: editGradeReq = {
+                points: points,
+                id: props.id,
                 authToken: authToken
             }
-            editRenewalFrequency(req).unwrap().then(resp=>{
+            editGrade(req).unwrap().then(resp=>{
                 toast.success(resp.message)
             }).catch(err=>{
-                toast.error(err.data.message)
+                console.log(err)
             })
             handleClose();
           },
         }}
       >
-        <DialogTitle>Edit renewal frequency</DialogTitle>
+        <DialogTitle>Edit grade points</DialogTitle>
         <DialogContent>
+          {/* <DialogContentText>
+            Are you sure you want to delete the appreciation?
+          </DialogContentText> */}
           <TextField
             autoFocus
             required
             margin="dense"
             id="name"
-            name="renewal_frequency"
-            label="Renewal Frequency"
-            type="number"
+            name="points"
+            label="Points"
+            type="text"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Apply</Button>
+          <Button type="submit">Update</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
