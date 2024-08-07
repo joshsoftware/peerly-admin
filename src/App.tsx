@@ -8,6 +8,7 @@ import { getAuthToken } from "./login/slice";
 import { useEffect } from "react";
 import Home from "./home";
 import Config from "./config";
+import Badges from "./badges";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
     {
       path: "/config",
       element: <Config />,
+    },
+    {
+      path: "/badges",
+      element: <Badges />,
     },
   ]);
 

@@ -27,7 +27,7 @@ export default function TemporaryDrawer() {
   };
 
   const iconList = [<DashboardIcon/>, <PostAddIcon/>, <LocalPoliceIcon/>, <DiamondIcon/>, <AssuredWorkloadIcon/>]
-  const routeList = ['/', '/appreciations', '/', '/', '/config']
+  const routeList = ['/', '/appreciations', '/badges', '/', '/config']
   const dispatch = useDispatch();
   const setRoute = (index: number) => () => {
     dispatch(getRoute(routeList[index]));
