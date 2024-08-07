@@ -7,10 +7,12 @@ import { RootState } from "../store";
 import GradesTable from "./components/grades";
 import OrgConfigTable from "./components/orgConfig";
 import EditRenewalFreqDialog from "./components/editRenewalFreqDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditGradeDialog from "./components/editGradeDialogue";
+import { useNavigate } from "react-router-dom";
 
 const Config = () => {
+  const navigate = useNavigate()
   const authToken = useSelector((state: RootState) => state.loginStore.authToken);
   const {data: gradesResp, isError: listGradesError} = useGetGradesQuery({
     authToken: authToken
@@ -21,6 +23,14 @@ const Config = () => {
   const [openEditFrequency, setOpenEditFrequency] = useState<boolean>(false);
   const [openEditGrade, setOpenEditGrade] = useState<boolean>(false);
   const [id,setId] = useState<number>(0);
+  useEffect(()=>{
+    console.log("authtoken -> ",authToken)
+    if(authToken === ""){
+      navigate("/login")
+    }else{
+      navigate("/config")
+    }
+  },[authToken])
   return (
     <>
       <TemporaryDrawer />
