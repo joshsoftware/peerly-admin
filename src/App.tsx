@@ -46,6 +46,7 @@ function App() {
   useEffect(() => {
     sendData();
   }, []);
+  
 
   return (
     <>

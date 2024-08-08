@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
 import TemporaryDrawer from "../sideBar";
+import PermanentDrawerLeft from "../permanentSidebar";
 
 const Appreciations = () => {
   const navigate = useNavigate()
@@ -38,11 +39,12 @@ const Appreciations = () => {
 
   return (
     <>
-      <TemporaryDrawer/>
+      {/* <TemporaryDrawer/> */}
       {listAppreciationsError || listReportedAppreciationsError ? (
             <h1>Error</h1>
       ) : (
-        <AppreciationTable response={response} setFilter={setFilter} filter={filter} />
+        <PermanentDrawerLeft component={<AppreciationTable response={response} setFilter={setFilter} filter={filter} />} />
+        
       )}
     </>
   );

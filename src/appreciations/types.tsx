@@ -56,6 +56,7 @@ export interface IPropsTable {
 
 export interface IPropsButtons{
     setFilter: (value: string | ((prevVar: string) => string)) => void;
+    setPage: (value: number | ((prevVar: number) => number)) => void;
 }
 
 export interface moderationReq{

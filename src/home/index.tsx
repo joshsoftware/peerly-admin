@@ -1,10 +1,8 @@
-import TemporaryDrawer from "../sideBar"
+import PermanentDrawerLeft from "../permanentSidebar"
 
 const Home = () => {
     return(
-        <>
-        <TemporaryDrawer/>
-        home</>
+        <PermanentDrawerLeft component={<>Home</>}/>
     )
 }
 

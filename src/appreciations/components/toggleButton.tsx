@@ -11,7 +11,8 @@ export default function AppreciationToggleButton(props: IPropsButtons) {
     newAlignment: string,
   ) => {
     setAlignment(newAlignment);
-    props.setFilter(newAlignment)
+    props.setFilter(newAlignment);
+    props.setPage(0)
   };
 
   return (

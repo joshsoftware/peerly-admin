@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { useGetBadgesQuery } from "./apiSlice";
 import BadgesTable from "./components/table";
 import EditBadgeDialog from "./components/dialogueBox";
+import PermanentDrawerLeft from "../permanentSidebar";
 
-const Badges = () => {
+const BadgesComponent = () => {
   const navigate = useNavigate()
   const authToken = useSelector((state: RootState) => state.loginStore.authToken);
   const {data: badgesResp, isError: listBadgesError} = useGetBadgesQuery({
@@ -26,7 +27,6 @@ const Badges = () => {
   },[authToken])
   return (
     <>
-      <TemporaryDrawer />
       <Typography pt={2} variant="h6">Badges</Typography>
       {!listBadgesError ? <BadgesTable badgeList={badgesResp?.data} setOpen={setOpen} id={id} setId={setId}/> : <></>}
      
@@ -34,5 +34,11 @@ const Badges = () => {
     </>
   );
 };
+
+const Badges = () => {
+  return(
+    <PermanentDrawerLeft component={<BadgesComponent/>} />
+  )
+}
 
 export default Badges;

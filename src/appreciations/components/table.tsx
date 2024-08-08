@@ -242,6 +242,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
+              sx={props.filter =="reported" ? (headCell.id == "isValid"|| headCell.id == "rewardPoints" ? {width: "120px"} : {width: "160px"}) : {}}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -260,11 +261,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
   numSelected: number;
   setFilter: (value: string | ((prevVar: string) => string)) => void;
+  setPage: (value: number | ((prevVar: number) => number)) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   return (
     <Toolbar
+    
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
@@ -280,7 +283,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       </Typography>
 
       <Tooltip title="Filter list">
-        <AppreciationToggleButton setFilter={props.setFilter} />
+        <AppreciationToggleButton setFilter={props.setFilter} setPage={props.setPage} />
       </Tooltip>
     </Toolbar>
   );
@@ -290,7 +293,7 @@ export default function AppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -391,11 +394,12 @@ export default function AppreciationTable(props: IPropsTable) {
   const [id, setId] = useState<number>(0);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={props.filter === "reported" ? {width : "83%", position: "fixed"} : {width : "100%"}}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
           setFilter={props.setFilter}
+          setPage={setPage}
         />
         <TableContainer>
           <Table
@@ -489,7 +493,7 @@ export default function AppreciationTable(props: IPropsTable) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 8]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
