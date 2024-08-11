@@ -6,6 +6,7 @@ import loginReducer from './login/slice';
 import sidebarReducer  from './sideBar/slice.tsx';
 import { configSlice } from './config/apiSlice.tsx';
 import { badgesSlice } from './badges/apiSlice.tsx';
+import { coreValueSlice } from './coreValues/apiSlice.tsx';
 
 
 export const store = configureStore({
@@ -18,12 +19,13 @@ export const store = configureStore({
     [appreciationSlice.reducerPath]: appreciationSlice.reducer,
     [configSlice.reducerPath]: configSlice.reducer,
     [badgesSlice.reducerPath]: badgesSlice.reducer,
+    [coreValueSlice.reducerPath]: coreValueSlice.reducer,
 
   },
 
   middleware: (getDefaultMiddleware) =>
 
-    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware).concat(badgesSlice.middleware)
+    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware).concat(badgesSlice.middleware).concat(coreValueSlice.middleware)
 
 });
 

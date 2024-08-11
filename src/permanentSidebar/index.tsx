@@ -28,7 +28,7 @@ export default function PermanentDrawerLeft(props: IProps) {
     <DiamondIcon />,
     <AssuredWorkloadIcon />,
   ];
-  const routeList = ["/", "/appreciations", "/badges", "/", "/config"];
+  const routeList = ["/", "/appreciations", "/badges", "/core_values", "/config"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const setRoute = (index: number) => () => {
