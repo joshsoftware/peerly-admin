@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
-import TemporaryDrawer from "../sideBar";
 import PermanentDrawerLeft from "../permanentSidebar";
 
 const Appreciations = () => {
