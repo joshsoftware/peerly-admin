@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { coreValuesResp } from "./types";
+import { baseUrl } from "../constants";
 
 export const coreValueSlice = createApi({
   reducerPath: "coreValueSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:33001/peerly",
+    baseUrl: baseUrl,
   }),
   tagTypes: ["coreValues"],
   endpoints: (builder) => ({

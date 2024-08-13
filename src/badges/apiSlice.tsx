@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { badgesResponse, editBadgeReq, editBadgeResp } from "./types";
+import { baseUrl } from "../constants";
 
 export const badgesSlice = createApi({
   reducerPath: "badgesSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:33001/peerly",
+    baseUrl: baseUrl,
   }),
   tagTypes: ["badges"],
   endpoints: (builder) => ({

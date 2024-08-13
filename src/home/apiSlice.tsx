@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { listUsersResp, sendNotificationReq, sendNotificationResponse } from "./types";
+import { baseUrl } from "../constants";
 
 export const homeSlice = createApi({
   reducerPath: "homeSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:33001/peerly",
+    baseUrl: baseUrl,
   }),
   tagTypes: ["downloadReport", "users"],
   endpoints: (builder) => ({
