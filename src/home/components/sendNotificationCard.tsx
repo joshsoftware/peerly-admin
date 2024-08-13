@@ -1,37 +1,53 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const bull = (
   <Box
     component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
   >
     •
   </Box>
 );
 
-const card = (
-  <React.Fragment>
-    <CardContent>
-      <Typography variant="body1">
-        Send a notification
-      </Typography>
-    </CardContent>
-    <CardActions>
-      <Button size="small">Send Notification</Button>
-    </CardActions>
-  </React.Fragment>
-);
+interface IProps {
+  setOpenNotifyUser: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+  setOpenNotifyAll: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+}
 
-export default function NotificationCard() {
+export default function NotificationCard(props: IProps) {
+  const handleClickOpenNotifyAll = () => {
+    props.setOpenNotifyAll(true);
+  };
+
+  const handleClickOpenNotifyUser = () => {
+    props.setOpenNotifyUser(true);
+  };
+
   return (
     <Box sx={{ minWidth: 160 }}>
-      <Card variant="outlined">{card}</Card>
+      <Card variant="outlined">
+        <CardContent>
+          <Typography variant="body1">Send a notification</Typography>
+        </CardContent>
+
+        <Box sx={{display: "flex"}}>
+          <CardActions>
+            <Button size="small" onClick={handleClickOpenNotifyAll}>
+              Notify all
+            </Button>
+          </CardActions>
+          <CardActions>
+            <Button size="small" onClick={handleClickOpenNotifyUser}>
+              Notify a user
+            </Button>
+          </CardActions>
+        </Box>
+      </Card>
     </Box>
   );
 }

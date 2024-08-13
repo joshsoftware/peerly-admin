@@ -5,8 +5,15 @@ import AppreciationCountCard from "./components/appreciationCountCard";
 import { RootState } from "../store";
 import NotificationCard from "./components/sendNotificationCard";
 import DownloadExcelCard from "./components/downloadExcel";
+import { useState } from "react";
+import NotifiyAllDialog from "./components/notifyAllDilogBox";
+import NotifiyUserDialog from "./components/notifyUserDialogBox";
+import { Box } from "@mui/material";
 
 const HomeComponent = () => {
+  const [openNotifyAll, setOpenNotifyAll] = useState(false);
+  const [openNotifyUser, setOpenNotifyUser] = useState(false);
+
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
   );
@@ -18,15 +25,27 @@ const HomeComponent = () => {
     });
   return (
     <>
-      {!listAppreciationsError ? (
-        <AppreciationCountCard
-          count={appreciations?.data.metadata.total_records}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {!listAppreciationsError ? (
+          <AppreciationCountCard
+            count={appreciations?.data.metadata.total_records}
+          />
+        ) : (
+          <AppreciationCountCard count={0} />
+        )}
+        <NotificationCard
+          setOpenNotifyAll={setOpenNotifyAll}
+          setOpenNotifyUser={setOpenNotifyUser}
         />
-      ) : (
-        <AppreciationCountCard count={0} />
-      )}
-      <NotificationCard />
-      <DownloadExcelCard />
+        <DownloadExcelCard />
+      </Box>
+      <NotifiyAllDialog open={openNotifyAll} setOpen={setOpenNotifyAll} />
+      <NotifiyUserDialog open={openNotifyUser} setOpen={setOpenNotifyUser} />
     </>
   );
 };
