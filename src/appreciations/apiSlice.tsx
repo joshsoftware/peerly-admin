@@ -44,6 +44,28 @@ export const appreciationSlice = createApi({
       }),
       invalidatesTags: () => [{ type: "reported" }],
     }),
+
+    appreciationReport: builder.query<ArrayBuffer, { authToken: string }>({
+      query: ({ authToken }) => ({
+        url: "/admin/appreciation_report",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        responseHandler: (response) => response.arrayBuffer(),
+      }),
+    }),
+
+    reportedAppreciationReport: builder.query<ArrayBuffer, { authToken: string }>({
+      query: ({ authToken }) => ({
+        url: "/admin/reported_appreciation_report",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        responseHandler: (response) => response.arrayBuffer(),
+      }),
+    }),
   }),
 });
 
@@ -51,4 +73,6 @@ export const {
   useGetAppreciationsQuery,
   useGetReportedAppreciationsQuery,
   useDeleteAppreciationMutation,
+  useAppreciationReportQuery,
+  useReportedAppreciationReportQuery,
 } = appreciationSlice;

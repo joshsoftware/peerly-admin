@@ -9,16 +9,16 @@ export const homeSlice = createApi({
   }),
   tagTypes: ["downloadReport", "users"],
   endpoints: (builder) => ({
-    downloadReport: builder.query<ArrayBuffer, { authToken: string }>({
-      query: ({ authToken }) => ({
-        url: "/admin/report",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-        responseHandler: (response) => response.arrayBuffer(),
-      }),
-    }),
+    // downloadReport: builder.query<ArrayBuffer, { authToken: string }>({
+    //   query: ({ authToken }) => ({
+    //     url: "/admin/appreciation_report",
+    //     method: "GET",
+    //     headers: {
+    //       Authorization: `Bearer ${authToken}`,
+    //     },
+    //     responseHandler: (response) => response.arrayBuffer(),
+    //   }),
+    // }),
 
     getUsers: builder.query<listUsersResp,{ page: number; page_size: number; authToken: string }>({
       query: ({ page, page_size, authToken }) => ({
@@ -58,7 +58,7 @@ export const homeSlice = createApi({
 });
 
 export const { 
-  useDownloadReportQuery,
+  // useDownloadReportQuery,
   useSendNotificationMutation,
   useGetUsersQuery
  } = homeSlice;

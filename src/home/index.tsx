@@ -4,7 +4,7 @@ import PermanentDrawerLeft from "../permanentSidebar";
 import AppreciationCountCard from "./components/appreciationCountCard";
 import { RootState } from "../store";
 import NotificationCard from "./components/sendNotificationCard";
-import DownloadExcelCard from "./components/downloadExcel";
+// import DownloadExcelCard from "./components/downloadExcel";
 import { useState } from "react";
 import NotifiyAllDialog from "./components/notifyAllDilogBox";
 import NotifiyUserDialog from "./components/notifyUserDialogBox";
@@ -42,7 +42,7 @@ const HomeComponent = () => {
           setOpenNotifyAll={setOpenNotifyAll}
           setOpenNotifyUser={setOpenNotifyUser}
         />
-        <DownloadExcelCard />
+        {/* <DownloadExcelCard /> */}
       </Box>
       <NotifiyAllDialog open={openNotifyAll} setOpen={setOpenNotifyAll} />
       <NotifiyUserDialog open={openNotifyUser} setOpen={setOpenNotifyUser} />

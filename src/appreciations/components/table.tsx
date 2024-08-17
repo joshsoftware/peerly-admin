@@ -18,6 +18,13 @@ import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
 import AppreciationToggleButton from "./toggleButton";
 import DeleteDialog from "./dialogeBox";
+import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import {
+  useAppreciationReportQuery,
+  useReportedAppreciationReportQuery,
+} from "../apiSlice";
+import { RootState } from "../../store";
 
 interface Data {
   id: number;
@@ -242,7 +249,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
-              sx={props.filter =="reported" ? (headCell.id == "isValid"|| headCell.id == "rewardPoints" ? {width: "120px"} : {width: "160px"}) : {}}
+              sx={
+                props.filter == "reported"
+                  ? headCell.id == "isValid" || headCell.id == "rewardPoints"
+                    ? { width: "120px" }
+                    : { width: "160px" }
+                  : {}
+              }
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -260,14 +273,65 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  filter: string;
   setFilter: (value: string | ((prevVar: string) => string)) => void;
   setPage: (value: number | ((prevVar: number) => number)) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+  const authToken = useSelector(
+    (state: RootState) => state.loginStore.authToken
+  );
+  const { data: appreciations, error: appreciationError } =
+    useAppreciationReportQuery({ authToken });
+  const { data: reportedAppreciations, error: reportedAppreciationError } =
+    useReportedAppreciationReportQuery({ authToken });
+  const handleClick = () => {
+    if (props.filter === "reported") {
+      if (reportedAppreciations) {
+        // Create a URL for the Blob
+        const blob = new Blob([reportedAppreciations], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Create a link element and trigger a download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ReportedAppreciaitionsReport.xlsx"; // Set the desired filename
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else if (reportedAppreciations) {
+        console.error(
+          "Error downloading the report:",
+          reportedAppreciationError
+        );
+      }
+    } else {
+      if (appreciations) {
+        // Create a URL for the Blob
+        const blob = new Blob([appreciations], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Create a link element and trigger a download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "AppreciationsReport.xlsx"; // Set the desired filename
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else if (appreciationError) {
+        console.error("Error downloading the report:", appreciationError);
+      }
+    }
+  };
   return (
     <Toolbar
-    
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
@@ -282,9 +346,14 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         Appreciations
       </Typography>
 
-      <Tooltip title="Filter list">
-        <AppreciationToggleButton setFilter={props.setFilter} setPage={props.setPage} />
-      </Tooltip>
+      <Button sx={{ width: "fit-content" }} onClick={handleClick}>
+        Download Report
+      </Button>
+
+      <AppreciationToggleButton
+        setFilter={props.setFilter}
+        setPage={props.setPage}
+      />
     </Toolbar>
   );
 }
@@ -298,11 +367,10 @@ export default function AppreciationTable(props: IPropsTable) {
 
   useEffect(() => {
     const data = props.response;
-    if(props.filter == "reported"){
-      setOrderBy("isValid")
-    }
-    else{
-      setOrderBy("date")
+    if (props.filter == "reported") {
+      setOrderBy("isValid");
+    } else {
+      setOrderBy("date");
     }
     setRows([]);
 
@@ -394,12 +462,19 @@ export default function AppreciationTable(props: IPropsTable) {
   const [id, setId] = useState<number>(0);
 
   return (
-    <Box sx={props.filter === "reported" ? {width : "83%", position: "fixed"} : {width : "100%"}}>
+    <Box
+      sx={
+        props.filter === "reported"
+          ? { width: "83%", position: "fixed" }
+          : { width: "100%" }
+      }
+    >
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
           setFilter={props.setFilter}
           setPage={setPage}
+          filter={props.filter}
         />
         <TableContainer>
           <Table
