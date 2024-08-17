@@ -171,18 +171,6 @@ const reportedColumns: HeadCell[] = [
     disablePadding: false,
     label: "Status",
   },
-  {
-    id: "status",
-    numeric: false,
-    disablePadding: false,
-    label: "Delete",
-  },
-  {
-    id: "status",
-    numeric: false,
-    disablePadding: false,
-    label: "Resolve",
-  },
 ];
 
 const appreciationColumns: HeadCell[] = [
@@ -279,6 +267,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        {props.filter === "reported" ? (
+          <>
+            <TableCell>Resolve</TableCell>
+            <TableCell>Delete</TableCell>
+          </>
+        ) : (
+          <></>
+        )}
       </TableRow>
     </TableHead>
   );
@@ -560,25 +556,28 @@ export default function AppreciationTable(props: IPropsTable) {
                         </TableCell>
                         <TableCell align="right">{row.status}</TableCell>
                         {row.status === "reported" ? (
-                          <>
-                            <TableCell align="right" padding="checkbox">
-                              <IconButton
-                                onClick={() => handleClickOpenDelete(row.id)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </TableCell>
-                            <TableCell align="right" padding="checkbox">
-                              <IconButton
-                                onClick={() => handleClickOpenResolve(row.id)}
-                              >
-                                <CheckIcon />
-                              </IconButton>
-                            </TableCell>
-                          </>
+                          <TableCell align="right" padding="checkbox">
+                            <IconButton
+                              onClick={() => handleClickOpenDelete(row.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
                         ) : (
                           <>
                             <TableCell></TableCell>
+                          </>
+                        )}
+                        {row.status === "reported" ? (
+                          <TableCell align="right" padding="checkbox">
+                            <IconButton
+                              onClick={() => handleClickOpenResolve(row.id)}
+                            >
+                              <CheckIcon />
+                            </IconButton>
+                          </TableCell>
+                        ) : (
+                          <>
                             <TableCell></TableCell>
                           </>
                         )}
