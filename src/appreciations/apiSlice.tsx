@@ -31,9 +31,24 @@ export const appreciationSlice = createApi({
       }),
       providesTags: ["reported"],
     }),
+
     deleteAppreciation: builder.mutation<moderationResponse,Partial<moderationReq>>({
       query: (payload) => ({
         url: `/moderate_appreciation/${payload.id}`,
+        method: "PUT",
+        body: { moderator_comment: payload.moderator_comment },
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "Accept-Version": "application/vnd.peerly.v1",
+          Authorization: `Bearer ${payload.authToken}`,
+        },
+      }),
+      invalidatesTags: () => [{ type: "reported" }],
+    }),
+
+    resolveAppreciation: builder.mutation<moderationResponse,Partial<moderationReq>>({
+      query: (payload) => ({
+        url: `/resolve_appreciation/${payload.id}`,
         method: "PUT",
         body: { moderator_comment: payload.moderator_comment },
         headers: {
@@ -75,4 +90,5 @@ export const {
   useDeleteAppreciationMutation,
   useAppreciationReportQuery,
   useReportedAppreciationReportQuery,
+  useResolveAppreciationMutation,
 } = appreciationSlice;

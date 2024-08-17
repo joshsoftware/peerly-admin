@@ -27,6 +27,7 @@ export interface appreciation {
   moderated_by_last_name: string;
   moderator_comment: string;
   moderated_at: number;
+  status: string;
 }
 
 interface metadata{

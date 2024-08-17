@@ -12,19 +12,20 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
 import AppreciationToggleButton from "./toggleButton";
-import DeleteDialog from "./dialogeBox";
+import DeleteDialog from "./deleteDialogeBox";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import CheckIcon from "@mui/icons-material/Check";
 import {
   useAppreciationReportQuery,
   useReportedAppreciationReportQuery,
 } from "../apiSlice";
 import { RootState } from "../../store";
+import ResolveDialog from "./resolveDialogeBox";
 
 interface Data {
   id: number;
@@ -39,7 +40,7 @@ interface Data {
   reportedAt: number;
   moderatedBy: string;
   moderatorComment: string;
-  isValid: boolean;
+  status: string;
 }
 
 function createData(
@@ -55,7 +56,7 @@ function createData(
   reportedAt: number,
   moderatedBy: string,
   moderatorComment: string,
-  isValid: boolean
+  status: string
 ): Data {
   return {
     id,
@@ -70,7 +71,7 @@ function createData(
     reportedAt,
     moderatedBy,
     moderatorComment,
-    isValid,
+    status,
   };
 }
 
@@ -165,10 +166,22 @@ const reportedColumns: HeadCell[] = [
     label: "Moderator Comment",
   },
   {
-    id: "isValid",
+    id: "status",
+    numeric: false,
+    disablePadding: false,
+    label: "Status",
+  },
+  {
+    id: "status",
     numeric: false,
     disablePadding: false,
     label: "Delete",
+  },
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: false,
+    label: "Resolve",
   },
 ];
 
@@ -249,13 +262,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
-              sx={
-                props.filter == "reported"
-                  ? headCell.id == "isValid" || headCell.id == "rewardPoints"
-                    ? { width: "120px" }
-                    : { width: "160px" }
-                  : {}
-              }
+              // sx={
+              //   props.filter == "reported"
+              //     ? headCell.id == "isValid" || headCell.id == "rewardPoints"
+              //       ? { width: "120px" }
+              //       : { width: "160px" }
+              //     : {}
+              // }
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -362,13 +375,13 @@ export default function AppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
     const data = props.response;
     if (props.filter == "reported") {
-      setOrderBy("isValid");
+      setOrderBy("status");
     } else {
       setOrderBy("date");
     }
@@ -405,7 +418,7 @@ export default function AppreciationTable(props: IPropsTable) {
             " " +
             updatedItem.moderated_by_last_name,
           updatedItem.moderator_comment,
-          updatedItem.is_valid
+          updatedItem.status
         ),
       ]);
     });
@@ -429,11 +442,17 @@ export default function AppreciationTable(props: IPropsTable) {
     setSelected([]);
   };
 
-  const [open, setOpen] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openResolve, setOpenResolve] = useState<boolean>(false);
 
-  const handleClickOpen = (id: number) => {
+  const handleClickOpenDelete = (id: number) => {
     setId(id);
-    setOpen(true);
+    setOpenDelete(true);
+  };
+
+  const handleClickOpenResolve = (id: number) => {
+    setId(id);
+    setOpenResolve(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -539,14 +558,29 @@ export default function AppreciationTable(props: IPropsTable) {
                         <TableCell align="right">
                           {row.moderatorComment}
                         </TableCell>
-                        {row.isValid ? (
-                          <TableCell align="right" padding="checkbox">
-                            <IconButton onClick={() => handleClickOpen(row.id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
+                        <TableCell align="right">{row.status}</TableCell>
+                        {row.status === "reported" ? (
+                          <>
+                            <TableCell align="right" padding="checkbox">
+                              <IconButton
+                                onClick={() => handleClickOpenDelete(row.id)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                            <TableCell align="right" padding="checkbox">
+                              <IconButton
+                                onClick={() => handleClickOpenResolve(row.id)}
+                              >
+                                <CheckIcon />
+                              </IconButton>
+                            </TableCell>
+                          </>
                         ) : (
-                          <TableCell></TableCell>
+                          <>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </>
                         )}
                       </>
                     ) : (
@@ -577,7 +611,8 @@ export default function AppreciationTable(props: IPropsTable) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <DeleteDialog open={open} setOpen={setOpen} id={id} />
+      <DeleteDialog open={openDelete} setOpen={setOpenDelete} id={id} />
+      <ResolveDialog open={openResolve} setOpen={setOpenResolve} id={id} />
     </Box>
   );
 }
