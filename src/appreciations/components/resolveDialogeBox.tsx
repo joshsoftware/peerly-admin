@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import { useDeleteAppreciationMutation, useResolveAppreciationMutation } from '../apiSlice';
+import { useResolveAppreciationMutation } from '../apiSlice';
 import { moderationReq } from '../types';
 import { toast } from 'react-toastify';
 import { RootState } from '../../store';
