@@ -2,6 +2,7 @@ export interface badge {
     id: number;
     name: string;
     reward_points: number;
+    updated_by: string;
   }
   
   export interface badgesResponse {
