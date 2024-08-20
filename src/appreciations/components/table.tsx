@@ -269,8 +269,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         ))}
         {props.filter === "reported" ? (
           <>
-            <TableCell>Resolve</TableCell>
             <TableCell>Delete</TableCell>
+            <TableCell>Resolve</TableCell>
           </>
         ) : (
           <></>
