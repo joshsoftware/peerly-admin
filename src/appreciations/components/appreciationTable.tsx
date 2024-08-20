@@ -11,19 +11,14 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
-import DeleteDialog from "./deleteDialogeBox";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import CheckIcon from "@mui/icons-material/Check";
 import {
-  useReportedAppreciationReportQuery,
+  useAppreciationReportQuery
 } from "../apiSlice";
 import { RootState } from "../../store";
-import ResolveDialog from "./resolveDialogeBox";
 
 interface Data {
   id: number;
@@ -33,12 +28,6 @@ interface Data {
   coreValue: string;
   rewardPoints: number;
   date: number;
-  reportedBy: string;
-  reportingComment: string;
-  reportedAt: number;
-  moderatedBy: string;
-  moderatorComment: string;
-  status: string;
 }
 
 function createData(
@@ -48,13 +37,7 @@ function createData(
   receiver: string,
   coreValue: string,
   rewardPoints: number,
-  date: number,
-  reportedBy: string,
-  reportingComment: string,
-  reportedAt: number,
-  moderatedBy: string,
-  moderatorComment: string,
-  status: string
+  date: number
 ): Data {
   return {
     id,
@@ -64,12 +47,6 @@ function createData(
     coreValue,
     rewardPoints,
     date,
-    reportedBy,
-    reportingComment,
-    reportedAt,
-    moderatedBy,
-    moderatorComment,
-    status,
   };
 }
 
@@ -163,40 +140,10 @@ const headCells: HeadCell[] = [
     label: "Reward Points",
   },
   {
-    id: "reportedBy",
-    numeric: false,
-    disablePadding: false,
-    label: "Reported By",
-  },
-  {
-    id: "reportingComment",
-    numeric: false,
-    disablePadding: false,
-    label: "Reporting Comment",
-  },
-  {
-    id: "reportedAt",
+    id: "date",
     numeric: true,
     disablePadding: false,
-    label: "Reported At",
-  },
-  {
-    id: "moderatedBy",
-    numeric: false,
-    disablePadding: false,
-    label: "Moderated By",
-  },
-  {
-    id: "moderatorComment",
-    numeric: false,
-    disablePadding: false,
-    label: "Moderator Comment",
-  },
-  {
-    id: "status",
-    numeric: false,
-    disablePadding: false,
-    label: "Status",
+    label: "Date",
   },
 ];
 
@@ -231,9 +178,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-
-        <TableCell>Delete</TableCell>
-        <TableCell>Resolve</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -248,12 +192,12 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
   );
-  const { data: reportedAppreciations, error: reportedAppreciationError } =
-    useReportedAppreciationReportQuery({ authToken });
+  const { data: appreciations, error: appreciationError } =
+    useAppreciationReportQuery({ authToken });
   const handleClick = () => {
-    if (reportedAppreciations) {
+    if (appreciations) {
       // Create a URL for the Blob
-      const blob = new Blob([reportedAppreciations], {
+      const blob = new Blob([appreciations], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
@@ -261,13 +205,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ReportedAppreciaitionsReport.xlsx"; // Set the desired filename
+      a.download = "AppreciationsReport.xlsx"; // Set the desired filename
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-    } else if (reportedAppreciationError) {
-      console.error("Error downloading the report:", reportedAppreciationError);
+    } else if (appreciationError) {
+      console.error("Error downloading the report:", appreciationError);
     }
   };
   return (
@@ -286,13 +230,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         Appreciations
       </Typography>
 
-      <Button sx={{ width: "fit-content" }} onClick={handleClick}>
+      <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
       </Button>
     </Toolbar>
   );
 }
-export default function ReportedAppreciationTable(props: IPropsTable) {
+export default function AppreciationTable(props: IPropsTable) {
   const [order, setOrder] = useState<Order>("desc");
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
@@ -305,37 +249,16 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
     setRows([]);
 
     data?.map((item) => {
-      const updatedItem = {
-        ...item,
-        reported_by_first_name: item.reported_by_first_name || "",
-        reported_by_last_name: item.reported_by_last_name || "",
-        moderated_by_first_name: item.moderated_by_first_name || "",
-        moderated_by_last_name: item.moderated_by_last_name || "",
-        is_valid: item.is_valid === undefined ? true : item.is_valid,
-      };
-
       return setRows((prevData) => [
         ...prevData,
         createData(
-          updatedItem.id,
-          updatedItem.description,
-          updatedItem.sender_first_name + " " + updatedItem.sender_last_name,
-          updatedItem.receiver_first_name +
-            " " +
-            updatedItem.receiver_last_name,
-          updatedItem.core_value_name,
-          updatedItem.total_reward_points,
-          updatedItem.created_at,
-          updatedItem.reported_by_first_name +
-            " " +
-            updatedItem.reported_by_last_name,
-          updatedItem.reporting_comment,
-          updatedItem.reported_at,
-          updatedItem.moderated_by_first_name +
-            " " +
-            updatedItem.moderated_by_last_name,
-          updatedItem.moderator_comment,
-          updatedItem.status
+          item.id,
+          item.description,
+          item.sender_first_name + " " + item.sender_last_name,
+          item.receiver_first_name + " " + item.receiver_last_name,
+          item.core_value_name,
+          item.total_reward_points,
+          item.created_at
         ),
       ]);
     });
@@ -357,19 +280,6 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
       return;
     }
     setSelected([]);
-  };
-
-  const [openDelete, setOpenDelete] = useState<boolean>(false);
-  const [openResolve, setOpenResolve] = useState<boolean>(false);
-
-  const handleClickOpenDelete = (id: number) => {
-    setId(id);
-    setOpenDelete(true);
-  };
-
-  const handleClickOpenResolve = (id: number) => {
-    setId(id);
-    setOpenResolve(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -395,12 +305,13 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
     [order, orderBy, page, rowsPerPage, rows]
   );
 
-  const [id, setId] = useState<number>(0);
-
   return (
-    <Box sx={{ width: "83%", position: "fixed" }}>
+    <Box sx={{ width: "100%"}}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          setPage={setPage}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -438,42 +349,11 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                     <TableCell align="right">{row.receiver}</TableCell>
                     <TableCell align="right">{row.coreValue}</TableCell>
                     <TableCell align="right">{row.rewardPoints}</TableCell>
-                    <TableCell align="right">{row.reportedBy}</TableCell>
-                    <TableCell align="right">{row.reportingComment}</TableCell>
                     <TableCell align="right">
-                      {row.reportedAt == undefined
-                        ? row.reportedAt
-                        : new Date(row.reportedAt).toLocaleString()}
+                      {row.date == undefined
+                        ? row.date
+                        : new Date(row.date).toLocaleString()}
                     </TableCell>
-                    <TableCell align="right">{row.moderatedBy}</TableCell>
-                    <TableCell align="right">{row.moderatorComment}</TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
-                    {row.status === "reported" ? (
-                      <TableCell align="right" padding="checkbox">
-                        <IconButton
-                          onClick={() => handleClickOpenDelete(row.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    ) : (
-                      <>
-                        <TableCell></TableCell>
-                      </>
-                    )}
-                    {row.status === "reported" ? (
-                      <TableCell align="left" padding="checkbox">
-                        <IconButton
-                          onClick={() => handleClickOpenResolve(row.id)}
-                        >
-                          <CheckIcon />
-                        </IconButton>
-                      </TableCell>
-                    ) : (
-                      <>
-                        <TableCell></TableCell>
-                      </>
-                    )}
                   </TableRow>
                 );
               })}
@@ -499,8 +379,6 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <DeleteDialog open={openDelete} setOpen={setOpenDelete} id={id} />
-      <ResolveDialog open={openResolve} setOpen={setOpenResolve} id={id} />
     </Box>
   );
 }

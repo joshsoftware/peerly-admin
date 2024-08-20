@@ -9,8 +9,8 @@ import { grade } from "../types";
 import { useEffect, useState } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 
-function createData(id: number, name: string, points: number) {
-  return { id, name, points };
+function createData(id: number, name: string, points: number, updated_by: string) {
+  return { id, name, points, updated_by };
 }
 
 interface IProps {
@@ -31,7 +31,7 @@ export default function GradesTable(props: IProps) {
     props.gradesList?.map((grade) => {
       setRows((prevData) => [
         ...prevData,
-        createData(grade.id, grade.name, grade.points),
+        createData(grade.id, grade.name, grade.points, grade.updated_by),
       ]);
     });
   }, [props.gradesList]);
@@ -43,6 +43,8 @@ export default function GradesTable(props: IProps) {
             <TableCell sx={{ paddingRight: "10px" }}>Sr No</TableCell>
             <TableCell align="right">Grade</TableCell>
             <TableCell align="right">Points</TableCell>
+            <TableCell align="right">Updated By</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -56,6 +58,7 @@ export default function GradesTable(props: IProps) {
               </TableCell>
               <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.points}</TableCell>
+              <TableCell align="right">{row.updated_by}</TableCell>
               <TableCell
                 align="right"
                 onClick={() => {

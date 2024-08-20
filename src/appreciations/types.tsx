@@ -51,8 +51,6 @@ export interface response {
 
 export interface IPropsTable {
     response: appreciation[] | undefined
-    filter: string
-    setFilter: (value: string | ((prevVar: string) => string)) => void;
 }
 
 export interface IPropsButtons{

@@ -2,6 +2,7 @@ export interface grade {
   id: number;
   name: string;
   points: number;
+  updated_by: string;
 }
 
 export interface gradesResponse {
@@ -14,6 +15,7 @@ export interface gradesResponse {
 export interface orgConfig {
   id: number | undefined;
   reward_quota_renewal_frequency: number | undefined;
+  updated_by : string |undefined;
 }
 
 export interface orgConfigResponse {
