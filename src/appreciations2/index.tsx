@@ -1,18 +1,19 @@
-import QuaterTable from "./components/quater";
-import { useGetGradesQuery, useGetOrgConfigQuery } from "./apiSlice";
+import {
+  useGetAppreciationsQuery,
+  useGetReportedAppreciationsQuery,
+} from "./apiSlice";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import GradesTable from "./components/grades";
-import OrgConfigTable from "./components/orgConfig";
-import EditRenewalFreqDialog from "./components/editRenewalFreqDialog";
-import { useEffect, useState } from "react";
-import EditGradeDialog from "./components/editGradeDialogue";
 import { useNavigate } from "react-router-dom";
 import PermanentDrawerLeft from "../permanentSidebar";
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import AppreciationTable from "./components/appreciationTable";
+import ReportedAppreciationTable from "./components/reportedAppreciationTable";
+import "./appreciations.css"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,7 +44,7 @@ function a11yProps(index: number) {
   };
 }
 
-export function ConfigTabs() {
+export function AppTabs() {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -54,22 +55,23 @@ export function ConfigTabs() {
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
   );
-  const { data: gradesResp, isError: listGradesError } = useGetGradesQuery({
-    authToken: authToken,
-  });
-  const { data: orgConfigResp, isError: getOrgConfigError } =
-    useGetOrgConfigQuery({
+  const { data: appreciations, isError: listAppreciationsError } =
+    useGetAppreciationsQuery({
+      page: 1,
+      page_size: 10,
       authToken: authToken,
     });
-  const [openEditFrequency, setOpenEditFrequency] = useState<boolean>(false);
-  const [openEditGrade, setOpenEditGrade] = useState<boolean>(false);
-  const [id, setId] = useState<number>(0);
+  const {
+    data: reportedAppreciations,
+    isError: listReportedAppreciationsError,
+  } = useGetReportedAppreciationsQuery({ authToken: authToken });
+
   useEffect(() => {
     console.log("authtoken -> ", authToken);
     if (authToken === "") {
       navigate("/login");
     } else {
-      navigate("/config");
+      navigate("/app2");
     }
   }, [authToken]);
 
@@ -81,51 +83,34 @@ export function ConfigTabs() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Quaters" {...a11yProps(0)} />
-          <Tab label="Grades" {...a11yProps(1)} />
-          <Tab label="Org Config" {...a11yProps(2)} />
+          <Tab label="Appreciations" {...a11yProps(0)} />
+          <Tab label="Reported Appreciations" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <QuaterTable />
+        {listAppreciationsError || listReportedAppreciationsError ? (
+          <h1>Error</h1>
+        ) : (
+          <AppreciationTable
+            response={appreciations?.data.appreciations}
+          />
+        )}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        {!listGradesError ? (
-          <GradesTable
-            gradesList={gradesResp?.data}
-            setOpen={setOpenEditGrade}
-            id={id}
-            setId={setId}
+        {!listReportedAppreciationsError ? (
+          <ReportedAppreciationTable
+            response={reportedAppreciations?.data.appreciations}
           />
         ) : (
           <></>
         )}
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        {!getOrgConfigError ? (
-          <OrgConfigTable
-            orgConfig={orgConfigResp?.data}
-            setOpen={setOpenEditFrequency}
-          />
-        ) : (
-          <></>
-        )}
-      </CustomTabPanel>
-      <EditRenewalFreqDialog
-        open={openEditFrequency}
-        setOpen={setOpenEditFrequency}
-      />
-      <EditGradeDialog
-        open={openEditGrade}
-        setOpen={setOpenEditGrade}
-        id={id}
-      />
     </Box>
   );
 }
 
-const Config = () => {
-  return <PermanentDrawerLeft component={<ConfigTabs />} />;
+const Appreciations2 = () => {
+  return <PermanentDrawerLeft component={<AppTabs />} />;
 };
 
-export default Config;
+export default Appreciations2;

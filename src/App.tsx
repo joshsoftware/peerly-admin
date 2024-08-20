@@ -10,6 +10,7 @@ import Home from "./home";
 import Config from "./config";
 import Badges from "./badges";
 import CoreValues from "./coreValues";
+import Appreciations2 from "./appreciations2";
 
 function App() {
   const router = createBrowserRouter([
@@ -36,6 +37,10 @@ function App() {
     {
       path: "/core_values",
       element: <CoreValues />,
+    },
+    {
+      path: "/app2",
+      element: <Appreciations2 />,
     },
   ]);
 
