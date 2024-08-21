@@ -170,7 +170,7 @@ const headCells: HeadCell[] = [
     id: "reportingComment",
     numeric: false,
     disablePadding: false,
-    label: "Reporting Comment",
+    label: "Report",
   },
   {
     id: "reportedAt",
@@ -219,6 +219,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
+              sx={headCell.id === "status" ? {width: "60px"} :(headCell.id === "moderatorComment" ? { width: "157px"} : {width: "125px"}) }
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -273,16 +274,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        justifyContent: "end",
       }}
     >
-      <Typography
+      {/* <Typography
         sx={{ flex: "1 1 100%" }}
         variant="h6"
         id="tableTitle"
         component="div"
       >
         Appreciations
-      </Typography>
+      </Typography> */}
 
       <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
@@ -295,7 +297,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -436,24 +438,200 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {/* {row.description} */}
-                      <Tooltip title={row.description} arrow>
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.description}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
                         <span>{row.description}</span>
                       </Tooltip>
                     </TableCell>
-                    <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.receiver}</TableCell>
-                    <TableCell align="right">{row.coreValue}</TableCell>
-                    <TableCell align="right">{row.rewardPoints}</TableCell>
-                    <TableCell align="right">{row.reportedBy}</TableCell>
-                    <TableCell align="right">{row.reportingComment}</TableCell>
-                    <TableCell align="right">
-                      {row.reportedAt == undefined
-                        ? row.reportedAt
-                        : new Date(row.reportedAt).toLocaleString()}
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.sender}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.sender}</span>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell align="right">{row.moderatedBy}</TableCell>
-                    <TableCell align="right">{row.moderatorComment}</TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.receiver}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.receiver}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.coreValue}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.coreValue}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.rewardPoints}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.rewardPoints}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.reportedBy}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.reportedBy}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.reportingComment}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.reportingComment}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.reportedAt == undefined
+                            ? row.reportedAt
+                            : new Date(row.reportedAt).toLocaleString()}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.reportedAt == undefined
+                        ? row.reportedAt
+                        : new Date(row.reportedAt).toLocaleString()}</span>
+                      </Tooltip>
+                   
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {" "}
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.moderatedBy}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.moderatedBy}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.moderatorComment}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.moderatorComment}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
                     <TableCell align="right">{row.status}</TableCell>
                     {row.status === "reported" ? (
                       <TableCell align="right" padding="checkbox">
@@ -497,7 +675,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 8]}
+          rowsPerPageOptions={[2, 5, 7]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

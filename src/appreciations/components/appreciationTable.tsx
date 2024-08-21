@@ -13,11 +13,9 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
-import {
-  useAppreciationReportQuery
-} from "../apiSlice";
+import { useAppreciationReportQuery } from "../apiSlice";
 import { RootState } from "../../store";
 
 interface Data {
@@ -219,16 +217,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        justifyContent: "end",
       }}
     >
-      <Typography
+      {/* <Typography
         sx={{ flex: "1 1 100%" }}
         variant="h6"
         id="tableTitle"
         component="div"
       >
         Appreciations
-      </Typography>
+      </Typography> */}
 
       <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
@@ -241,7 +240,7 @@ export default function AppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -306,12 +305,9 @@ export default function AppreciationTable(props: IPropsTable) {
   );
 
   return (
-    <Box sx={{ width: "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          setPage={setPage}
-        />
+        <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -342,17 +338,127 @@ export default function AppreciationTable(props: IPropsTable) {
                       id={labelId}
                       scope="row"
                       padding="normal"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
                     >
-                      {row.description}
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.description}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.description}</span>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.receiver}</TableCell>
-                    <TableCell align="right">{row.coreValue}</TableCell>
-                    <TableCell align="right">{row.rewardPoints}</TableCell>
-                    <TableCell align="right">
-                      {row.date == undefined
-                        ? row.date
-                        : new Date(row.date).toLocaleString()}
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.sender}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.sender}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.receiver}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.receiver}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.coreValue}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.coreValue}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.rewardPoints}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.rewardPoints}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>
+                            {row.date == undefined
+                              ? row.date
+                              : new Date(row.date).toLocaleString()}
+                          </p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>
+                          {row.date == undefined
+                            ? row.date
+                            : new Date(row.date).toLocaleString()}
+                        </span>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 );
@@ -370,7 +476,7 @@ export default function AppreciationTable(props: IPropsTable) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 8]}
+          rowsPerPageOptions={[2, 5, 7]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
