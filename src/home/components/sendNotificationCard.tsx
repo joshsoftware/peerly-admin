@@ -29,13 +29,21 @@ export default function NotificationCard(props: IProps) {
   };
 
   return (
-    <Box sx={{ minWidth: 160 }}>
-      <Card variant="outlined">
+    <Box sx={{ minWidth: 160, margin: "20px", height: "150px" }}>
+      <Card
+        variant="outlined"
+        sx={{
+          height: "150px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
         <CardContent>
           <Typography variant="body1">Send a notification</Typography>
         </CardContent>
 
-        <Box sx={{display: "flex"}}>
+        <Box sx={{ display: "flex" }}>
           <CardActions>
             <Button size="small" onClick={handleClickOpenNotifyAll}>
               Notify all

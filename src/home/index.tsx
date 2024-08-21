@@ -28,7 +28,7 @@ const HomeComponent = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-evenly",
+          justifyContent: "flex-start",
         }}
       >
         {!listAppreciationsError ? (
