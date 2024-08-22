@@ -6,6 +6,8 @@ import { useAdminLoginMutation } from "../apiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { getAuthToken } from "../slice";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ const LoginForm = () => {
     password: Yup.string().required("Required!"),
   });
   const [loginAdmin] = useAdminLoginMutation();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: loginSchema,
@@ -28,7 +31,8 @@ const LoginForm = () => {
           console.log("response -> ", resp);
           toast.success(resp.message);
           localStorage.setItem("token", resp.data.AuthToken);
-          navigate("/")
+          dispatch(getAuthToken(resp.data.AuthToken));
+          navigate("/");
         })
         .catch((resp) => {
           console.log("response -> ", resp);
