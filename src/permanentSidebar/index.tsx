@@ -11,8 +11,9 @@ import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import { useDispatch } from "react-redux";
-import { getRoute } from "../sideBar/slice";
+import { getRoute } from "./slice";
 import { useNavigate } from "react-router-dom";
+import Header from "../header";
 
 const drawerWidth = 200;
 
@@ -36,6 +37,8 @@ export default function PermanentDrawerLeft(props: IProps) {
     navigate(routeList[index]);
   };
   return (
+    <>
+    <Header/>
     <Box sx={{ display: "flex" }}>
       <Drawer
         sx={{
@@ -44,6 +47,7 @@ export default function PermanentDrawerLeft(props: IProps) {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            marginTop: "48px",
           },
         }}
         variant="permanent"
@@ -65,10 +69,11 @@ export default function PermanentDrawerLeft(props: IProps) {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default"}}
+        sx={{ flexGrow: 1, bgcolor: "background.default", marginTop: "50px"}}
       >
         {props.component}
       </Box>
     </Box>
+    </>
   );
 }

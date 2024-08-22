@@ -3,19 +3,21 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import { useDeleteAppreciationMutation } from '../apiSlice';
+import { moderationReq } from '../types';
 import { toast } from 'react-toastify';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
-import { useEditRenewalFrequencyMutation } from '../apiSlice';
-import { editRenewalFrequencyReq } from '../types';
 
 interface IProps {
     open: boolean;
     setOpen: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+    id: number;
 }
-export default function EditRenewalFreqDialog(props: IProps) {
+export default function DeleteDialog(props: IProps) {
 
   const authToken = useSelector((state: RootState) => state.loginStore.authToken);
 
@@ -23,8 +25,7 @@ export default function EditRenewalFreqDialog(props: IProps) {
     props.setOpen(false);
   };
 
-  const [editRenewalFrequency] = useEditRenewalFrequencyMutation();
-
+  const [deleteAppreciation] = useDeleteAppreciationMutation();
 
   return (
     <React.Fragment>
@@ -36,14 +37,14 @@ export default function EditRenewalFreqDialog(props: IProps) {
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            console.log(formData)
             const formJson = Object.fromEntries((formData as any).entries());
-            const renewalFrequency = Number(formJson.renewal_frequency);
-            const req: editRenewalFrequencyReq = {
-                reward_quota_renewal_frequency: renewalFrequency,
+            const moderationComment = formJson.moderator_comment;
+            const req: moderationReq = {
+                moderator_comment: moderationComment,
+                id: props.id,
                 authToken: authToken
             }
-            editRenewalFrequency(req).unwrap().then(resp=>{
+            deleteAppreciation(req).unwrap().then(resp=>{
                 toast.success(resp.message)
             }).catch(err=>{
                 toast.error(err.data.message)
@@ -52,23 +53,26 @@ export default function EditRenewalFreqDialog(props: IProps) {
           },
         }}
       >
-        <DialogTitle>Edit renewal frequency</DialogTitle>
+        <DialogTitle>Delete Appreciation</DialogTitle>
         <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete the appreciation?
+          </DialogContentText>
           <TextField
             autoFocus
             required
             margin="dense"
             id="name"
-            name="renewal_frequency"
-            label="Renewal Frequency"
-            type="number"
+            name="moderator_comment"
+            label="Moderation Comment"
+            type="text"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Apply</Button>
+          <Button type="submit">Delete</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -1,12 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import { loginApiSlice } from './login/apiSlice.tsx';
-import { appreciationSlice } from './appreciations/apiSlice';
 import loginReducer from './login/slice';
-import sidebarReducer  from './sideBar/slice.tsx';
+import sidebarReducer  from './permanentSidebar/slice.tsx';
+import { appreciationSlice } from './appreciations/apiSlice';
 import { configSlice } from './config/apiSlice.tsx';
-import { badgesSlice } from './badges/apiSlice.tsx';
-import { coreValueSlice } from './coreValues/apiSlice.tsx';
 
 
 export const store = configureStore({
@@ -18,14 +15,12 @@ export const store = configureStore({
     [loginApiSlice.reducerPath]: loginApiSlice.reducer,
     [appreciationSlice.reducerPath]: appreciationSlice.reducer,
     [configSlice.reducerPath]: configSlice.reducer,
-    [badgesSlice.reducerPath]: badgesSlice.reducer,
-    [coreValueSlice.reducerPath]: coreValueSlice.reducer,
 
   },
 
   middleware: (getDefaultMiddleware) =>
 
-    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware).concat(badgesSlice.middleware).concat(coreValueSlice.middleware)
+    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware),
 
 });
 

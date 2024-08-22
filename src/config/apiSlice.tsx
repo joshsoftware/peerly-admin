@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { editGradeReq, editGradeResp, editRenewalFrequencyReq, editRenewalFrequencyResp, gradesResponse, orgConfigResponse } from "./types";
+import { baseUrl } from "../constants";
 
 export const configSlice = createApi({
   reducerPath: "configSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:33001/peerly",
+    baseUrl: baseUrl,
   }),
   tagTypes: ["gradesConfig","orgConfig"],
   endpoints: (builder) => ({
