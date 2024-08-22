@@ -1,11 +1,17 @@
-import TemporaryDrawer from "../sideBar"
+import Header from "../header"
+import PermanentDrawerLeft from "../permanentSidebar"
 
-const Home = () => {
+export function HomeTab() {
     return(
         <>
-        <TemporaryDrawer/>
-        home</>
+        <Header/>
+        </>
     )
 }
+
+
+const Home = () => {
+    return <PermanentDrawerLeft component={<HomeTab />} />;
+  };
 
 export default Home

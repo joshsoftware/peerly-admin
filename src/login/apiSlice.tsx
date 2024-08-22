@@ -1,12 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { userLoginBody, userLoginResp } from './types'
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { baseUrl } from '../constants'
 
 export const loginApiSlice = createApi({
   reducerPath: 'loginSlice',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:33001',
+    baseUrl: baseUrl,
   }),
   tagTypes: ['Login'],
   endpoints: (builder) => ({
