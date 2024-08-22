@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import { loginApiSlice } from './login/apiSlice.tsx';
-import { appreciationSlice } from './appreciations/apiSlice';
 import loginReducer from './login/slice';
-import sidebarReducer  from './sideBar/slice.tsx';
-import { configSlice } from './config/apiSlice.tsx';
+import sidebarReducer  from './permanentSidebar/slice.tsx';
+import { appreciationSlice } from './appreciations/apiSlice';
 
 
 export const store = configureStore({
@@ -15,13 +13,12 @@ export const store = configureStore({
     sidebarStore: sidebarReducer,
     [loginApiSlice.reducerPath]: loginApiSlice.reducer,
     [appreciationSlice.reducerPath]: appreciationSlice.reducer,
-    [configSlice.reducerPath]: configSlice.reducer,
 
   },
 
   middleware: (getDefaultMiddleware) =>
 
-    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware)
+    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware),
 
 });
 

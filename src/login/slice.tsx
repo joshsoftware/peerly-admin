@@ -21,4 +21,3 @@ export const loginSlice = createSlice({
 export const { getAuthToken } = loginSlice.actions;
 
 export default loginSlice.reducer;
-
