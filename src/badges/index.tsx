@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material";
-import TemporaryDrawer from "../sideBar";
+import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useEffect, useState } from "react";
@@ -26,12 +25,12 @@ const BadgesComponent = () => {
     }
   },[authToken])
   return (
-    <>
+    <Box sx={{margin : "0px 10px"}}>
       <Typography pt={2} variant="h6">Badges</Typography>
       {!listBadgesError ? <BadgesTable badgeList={badgesResp?.data} setOpen={setOpen} id={id} setId={setId}/> : <></>}
      
       <EditBadgeDialog open={open} setOpen={setOpen} id={id}/>
-    </>
+    </Box>
   );
 };
 

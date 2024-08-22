@@ -6,10 +6,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import TemporaryDrawer from "../sideBar";
-import PermanentDrawerLeft from "../permanentSidebar";
-=======
 import PermanentDrawerLeft from "../permanentSidebar";
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
@@ -18,7 +14,6 @@ import Box from "@mui/material/Box";
 import "./appreciations.css"
 import AppreciationTable from "./components/appreciationTable";
 import ReportedAppreciationTable from "./components/reportedAppreciationTable";
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,17 +76,6 @@ export function AppTabs() {
   }, [authToken]);
 
   return (
-<<<<<<< HEAD
-    <>
-      {/* <TemporaryDrawer/> */}
-      {listAppreciationsError || listReportedAppreciationsError ? (
-            <h1>Error</h1>
-      ) : (
-        <PermanentDrawerLeft component={<AppreciationTable response={response} setFilter={setFilter} filter={filter} />} />
-        
-      )}
-    </>
-=======
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -122,7 +106,6 @@ export function AppTabs() {
         )}
       </CustomTabPanel>
     </Box>
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f
   );
 }
 

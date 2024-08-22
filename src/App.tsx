@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import Home from "./home";
 import Config from "./config";
 import Badges from "./badges";
-import CoreValues from "./coreValues";
 
 function App() {
   const router = createBrowserRouter([
@@ -32,10 +31,6 @@ function App() {
     {
       path: "/badges",
       element: <Badges />,
-    },
-    {
-      path: "/core_values",
-      element: <CoreValues />,
     },
   ]);
 

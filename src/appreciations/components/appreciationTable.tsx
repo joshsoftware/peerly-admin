@@ -165,7 +165,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
-              sx={props.filter =="reported" ? (headCell.id == "isValid"|| headCell.id == "rewardPoints" ? {width: "120px"} : {width: "160px"}) : {}}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -183,10 +182,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-<<<<<<< HEAD:src/appreciations/components/table.tsx
-  setFilter: (value: string | ((prevVar: string) => string)) => void;
-=======
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f:src/appreciations/components/appreciationTable.tsx
   setPage: (value: number | ((prevVar: number) => number)) => void;
 }
 
@@ -218,7 +213,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   };
   return (
     <Toolbar
-    
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
@@ -235,15 +229,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         Appreciations
       </Typography> */}
 
-<<<<<<< HEAD:src/appreciations/components/table.tsx
-      <Tooltip title="Filter list">
-        <AppreciationToggleButton setFilter={props.setFilter} setPage={props.setPage} />
-      </Tooltip>
-=======
       <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
       </Button>
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f:src/appreciations/components/appreciationTable.tsx
     </Toolbar>
   );
 }
@@ -252,11 +240,7 @@ export default function AppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-<<<<<<< HEAD:src/appreciations/components/table.tsx
-  const [rowsPerPage, setRowsPerPage] = useState(8);
-=======
   const [rowsPerPage, setRowsPerPage] = useState(7);
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f:src/appreciations/components/appreciationTable.tsx
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -321,17 +305,9 @@ export default function AppreciationTable(props: IPropsTable) {
   );
 
   return (
-    <Box sx={props.filter === "reported" ? {width : "83%", position: "fixed"} : {width : "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-<<<<<<< HEAD:src/appreciations/components/table.tsx
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          setFilter={props.setFilter}
-          setPage={setPage}
-        />
-=======
         <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f:src/appreciations/components/appreciationTable.tsx
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -500,11 +476,7 @@ export default function AppreciationTable(props: IPropsTable) {
           </Table>
         </TableContainer>
         <TablePagination
-<<<<<<< HEAD:src/appreciations/components/table.tsx
-          rowsPerPageOptions={[5, 8]}
-=======
           rowsPerPageOptions={[2, 5, 7]}
->>>>>>> 5ba4b8d5cc57380a23adcad2a41bcf1403f5743f:src/appreciations/components/appreciationTable.tsx
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
