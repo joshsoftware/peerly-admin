@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import { useDeleteAppreciationMutation } from '../apiSlice';
+import { useResolveAppreciationMutation } from '../apiSlice';
 import { moderationReq } from '../types';
 import { toast } from 'react-toastify';
 import { RootState } from '../../store';
@@ -17,7 +17,7 @@ interface IProps {
     setOpen: (value: boolean | ((prevVar: boolean) => boolean)) => void;
     id: number;
 }
-export default function DeleteDialog(props: IProps) {
+export default function ResolveDialog(props: IProps) {
 
   const authToken = useSelector((state: RootState) => state.loginStore.authToken);
 
@@ -25,7 +25,7 @@ export default function DeleteDialog(props: IProps) {
     props.setOpen(false);
   };
 
-  const [deleteAppreciation] = useDeleteAppreciationMutation();
+  const [resolveAppreciation] = useResolveAppreciationMutation();
 
   return (
     <React.Fragment>
@@ -44,7 +44,7 @@ export default function DeleteDialog(props: IProps) {
                 id: props.id,
                 authToken: authToken
             }
-            deleteAppreciation(req).unwrap().then(resp=>{
+            resolveAppreciation(req).unwrap().then(resp=>{
                 toast.success(resp.message)
             }).catch(err=>{
                 toast.error(err.data.message)
@@ -53,10 +53,10 @@ export default function DeleteDialog(props: IProps) {
           },
         }}
       >
-        <DialogTitle>Delete Appreciation</DialogTitle>
+        <DialogTitle>Resolve Appreciation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete the appreciation?
+            Are you sure you want to resolve the appreciation?
           </DialogContentText>
           <TextField
             autoFocus
@@ -72,7 +72,7 @@ export default function DeleteDialog(props: IProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Delete</Button>
+          <Button type="submit">Resolve</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

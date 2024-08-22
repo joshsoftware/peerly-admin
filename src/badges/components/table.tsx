@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { badge } from "../types";
 
-function createData(id: number, name: string, reward_points: number) {
-  return { id, name, reward_points };
+function createData(id: number, name: string, reward_points: number, updated_by: string) {
+  return { id, name, reward_points, updated_by };
 }
 
 interface IProps {
@@ -31,7 +31,7 @@ export default function BadgesTable(props: IProps) {
     props.badgeList?.map((badge) => {
       setRows((prevData) => [
         ...prevData,
-        createData(badge.id, badge.name, badge.reward_points),
+        createData(badge.id, badge.name, badge.reward_points, badge.updated_by),
       ]);
     });
   }, [props.badgeList]);
@@ -43,6 +43,7 @@ export default function BadgesTable(props: IProps) {
             <TableCell sx={{ paddingRight: "10px" }}>Sr No</TableCell>
             <TableCell align="right">Badge</TableCell>
             <TableCell align="right">Reward Points</TableCell>
+            <TableCell align="right">Updated By</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
@@ -57,6 +58,7 @@ export default function BadgesTable(props: IProps) {
               </TableCell>
               <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.reward_points}</TableCell>
+              <TableCell align="right">{row.updated_by}</TableCell>
               <TableCell
                 align="right"
                 onClick={() => {
