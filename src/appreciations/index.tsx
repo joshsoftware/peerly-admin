@@ -58,7 +58,7 @@ export function AppTabs() {
   const { data: appreciations, isError: listAppreciationsError } =
     useGetAppreciationsQuery({
       page: 1,
-      page_size: 10,
+      page_size: 1000,
       authToken: authToken,
     });
   const {

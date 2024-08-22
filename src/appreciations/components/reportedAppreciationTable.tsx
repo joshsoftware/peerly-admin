@@ -398,7 +398,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
   const [id, setId] = useState<number>(0);
 
   return (
-    <Box sx={{ width: "83%", position: "fixed" }}>
+    <Box sx={{ width: "85%", position: "fixed" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
         <TableContainer>

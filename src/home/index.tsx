@@ -5,10 +5,11 @@ import AppreciationCountCard from "./components/appreciationCountCard";
 import { RootState } from "../store";
 import NotificationCard from "./components/sendNotificationCard";
 // import DownloadExcelCard from "./components/downloadExcel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotifiyAllDialog from "./components/notifyAllDilogBox";
 import NotifiyUserDialog from "./components/notifyUserDialogBox";
 import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const HomeComponent = () => {
   const [openNotifyAll, setOpenNotifyAll] = useState(false);
@@ -23,6 +24,15 @@ const HomeComponent = () => {
       page_size: 10,
       authToken: authToken,
     });
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log("authtoken -> ", authToken);
+    if (authToken === "") {
+      navigate("/login");
+    } else {
+      navigate("/");
+    }
+  }, [authToken]);
   return (
     <>
       <Box

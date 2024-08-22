@@ -50,7 +50,7 @@ export default function NotificationCard(props: IProps) {
             </Button>
           </CardActions>
           <CardActions>
-            <Button size="small" onClick={handleClickOpenNotifyUser}>
+            <Button size="small" sx={{fontFamily : "Arial"}} onClick={handleClickOpenNotifyUser}>
               Notify a user
             </Button>
           </CardActions>

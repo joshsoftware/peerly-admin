@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useEffect } from "react";
@@ -22,10 +22,10 @@ const CoreValuesComponent = () => {
     }
   },[authToken])
   return (
-    <>
+    <Box sx={{margin : "0px 10px"}}>
       <Typography pt={2} variant="h6">Core Values</Typography>
       {!listCoreValuesError ? <CoreValuesTable coreValueList={coreValueResp?.data} /> : <></>}
-    </>
+    </Box>
   );
 };
 
