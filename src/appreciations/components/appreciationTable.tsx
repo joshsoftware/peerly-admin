@@ -9,15 +9,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
-import AppreciationToggleButton from "./toggleButton";
-import DeleteDialog from "./dialogeBox";
+import { Button, Tooltip } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useAppreciationReportQuery } from "../apiSlice";
+import { RootState } from "../../store";
 
 interface Data {
   id: number;
@@ -27,12 +25,6 @@ interface Data {
   coreValue: string;
   rewardPoints: number;
   date: number;
-  reportedBy: string;
-  reportingComment: string;
-  reportedAt: number;
-  moderatedBy: string;
-  moderatorComment: string;
-  isValid: boolean;
 }
 
 function createData(
@@ -42,13 +34,7 @@ function createData(
   receiver: string,
   coreValue: string,
   rewardPoints: number,
-  date: number,
-  reportedBy: string,
-  reportingComment: string,
-  reportedAt: number,
-  moderatedBy: string,
-  moderatorComment: string,
-  isValid: boolean
+  date: number
 ): Data {
   return {
     id,
@@ -58,12 +44,6 @@ function createData(
     coreValue,
     rewardPoints,
     date,
-    reportedBy,
-    reportingComment,
-    reportedAt,
-    moderatedBy,
-    moderatorComment,
-    isValid,
   };
 }
 
@@ -115,7 +95,6 @@ interface HeadCell {
 
 interface EnhancedTableProps {
   numSelected: number;
-  filter: string;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -126,55 +105,7 @@ interface EnhancedTableProps {
   rowCount: number;
 }
 
-const reportedColumns: HeadCell[] = [
-  {
-    id: "reportedBy",
-    numeric: false,
-    disablePadding: false,
-    label: "Reported By",
-  },
-  {
-    id: "reportingComment",
-    numeric: false,
-    disablePadding: false,
-    label: "Reporting Comment",
-  },
-  {
-    id: "reportedAt",
-    numeric: true,
-    disablePadding: false,
-    label: "Reported At",
-  },
-  {
-    id: "moderatedBy",
-    numeric: false,
-    disablePadding: false,
-    label: "Moderated By",
-  },
-  {
-    id: "moderatorComment",
-    numeric: false,
-    disablePadding: false,
-    label: "Moderator Comment",
-  },
-  {
-    id: "isValid",
-    numeric: false,
-    disablePadding: false,
-    label: "Delete",
-  },
-];
-
-const appreciationColumns: HeadCell[] = [
-  {
-    id: "date",
-    numeric: true,
-    disablePadding: false,
-    label: "Date",
-  },
-];
-
-const DefaultCells: HeadCell[] = [
+const headCells: HeadCell[] = [
   {
     id: "description",
     numeric: false,
@@ -205,23 +136,15 @@ const DefaultCells: HeadCell[] = [
     disablePadding: false,
     label: "Reward Points",
   },
+  {
+    id: "date",
+    numeric: true,
+    disablePadding: false,
+    label: "Date",
+  },
 ];
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const [headCells, setHeadCells] = useState<HeadCell[]>(DefaultCells);
-
-  useEffect(() => {
-    setHeadCells(DefaultCells);
-    if (props.filter === "reported") {
-      reportedColumns?.forEach((item) => {
-        return setHeadCells((prevData) => [...prevData, item]);
-      });
-    } else {
-      appreciationColumns?.forEach((item) => {
-        return setHeadCells((prevData) => [...prevData, item]);
-      });
-    }
-  }, [props.filter]);
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
@@ -259,29 +182,56 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  setFilter: (value: string | ((prevVar: string) => string)) => void;
+  setPage: (value: number | ((prevVar: number) => number)) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+  const authToken = useSelector(
+    (state: RootState) => state.loginStore.authToken
+  );
+  const { data: appreciations, error: appreciationError } =
+    useAppreciationReportQuery({ authToken });
+  const handleClick = () => {
+    if (appreciations) {
+      // Create a URL for the Blob
+      const blob = new Blob([appreciations], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Create a link element and trigger a download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "AppreciationsReport.xlsx"; // Set the desired filename
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } else if (appreciationError) {
+      console.error("Error downloading the report:", appreciationError);
+    }
+  };
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        justifyContent: "end",
+        minHeight: "40px"
       }}
     >
-      <Typography
+      {/* <Typography
         sx={{ flex: "1 1 100%" }}
         variant="h6"
         id="tableTitle"
         component="div"
       >
         Appreciations
-      </Typography>
+      </Typography> */}
 
-      <Tooltip title="Filter list">
-        <AppreciationToggleButton setFilter={props.setFilter} />
-      </Tooltip>
+      <Button sx={{ width: "215px" }} onClick={handleClick}>
+        Download Report
+      </Button>
     </Toolbar>
   );
 }
@@ -290,51 +240,24 @@ export default function AppreciationTable(props: IPropsTable) {
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [rows, setRows] = useState<Data[]>([]);
 
   useEffect(() => {
     const data = props.response;
-    if(props.filter == "reported"){
-      setOrderBy("isValid")
-    }
-    else{
-      setOrderBy("date")
-    }
     setRows([]);
 
     data?.map((item) => {
-      const updatedItem = {
-        ...item,
-        reported_by_first_name: item.reported_by_first_name || "",
-        reported_by_last_name: item.reported_by_last_name || "",
-        moderated_by_first_name: item.moderated_by_first_name || "",
-        moderated_by_last_name: item.moderated_by_last_name || "",
-        is_valid: item.is_valid === undefined ? true : item.is_valid,
-      };
-
       return setRows((prevData) => [
         ...prevData,
         createData(
-          updatedItem.id,
-          updatedItem.description,
-          updatedItem.sender_first_name + " " + updatedItem.sender_last_name,
-          updatedItem.receiver_first_name +
-            " " +
-            updatedItem.receiver_last_name,
-          updatedItem.core_value_name,
-          updatedItem.total_reward_points,
-          updatedItem.created_at,
-          updatedItem.reported_by_first_name +
-            " " +
-            updatedItem.reported_by_last_name,
-          updatedItem.reporting_comment,
-          updatedItem.reported_at,
-          updatedItem.moderated_by_first_name +
-            " " +
-            updatedItem.moderated_by_last_name,
-          updatedItem.moderator_comment,
-          updatedItem.is_valid
+          item.id,
+          item.description,
+          item.sender_first_name + " " + item.sender_last_name,
+          item.receiver_first_name + " " + item.receiver_last_name,
+          item.core_value_name,
+          item.total_reward_points,
+          item.created_at
         ),
       ]);
     });
@@ -356,13 +279,6 @@ export default function AppreciationTable(props: IPropsTable) {
       return;
     }
     setSelected([]);
-  };
-
-  const [open, setOpen] = useState<boolean>(false);
-
-  const handleClickOpen = (id: number) => {
-    setId(id);
-    setOpen(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -388,15 +304,10 @@ export default function AppreciationTable(props: IPropsTable) {
     [order, orderBy, page, rowsPerPage, rows]
   );
 
-  const [id, setId] = useState<number>(0);
-
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          setFilter={props.setFilter}
-        />
+        <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -405,7 +316,6 @@ export default function AppreciationTable(props: IPropsTable) {
           >
             <EnhancedTableHead
               numSelected={selected.length}
-              filter={props.filter}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -428,51 +338,128 @@ export default function AppreciationTable(props: IPropsTable) {
                       id={labelId}
                       scope="row"
                       padding="normal"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
                     >
-                      {row.description}
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.description}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.description}</span>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.receiver}</TableCell>
-                    <TableCell align="right">{row.coreValue}</TableCell>
-                    <TableCell align="right">{row.rewardPoints}</TableCell>
-
-                    {props.filter === "appreciations" ? (
-                      <TableCell align="right">
-                        {row.date == undefined
-                          ? row.date
-                          : new Date(row.date).toLocaleString()}
-                      </TableCell>
-                    ) : (
-                      <></>
-                    )}
-                    {props.filter === "reported" ? (
-                      <>
-                        <TableCell align="right">{row.reportedBy}</TableCell>
-                        <TableCell align="right">
-                          {row.reportingComment}
-                        </TableCell>
-                        <TableCell align="right">
-                          {row.reportedAt == undefined
-                            ? row.reportedAt
-                            : new Date(row.reportedAt).toLocaleString()}
-                        </TableCell>
-                        <TableCell align="right">{row.moderatedBy}</TableCell>
-                        <TableCell align="right">
-                          {row.moderatorComment}
-                        </TableCell>
-                        {row.isValid ? (
-                          <TableCell align="right" padding="checkbox">
-                            <IconButton onClick={() => handleClickOpen(row.id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
-                        ) : (
-                          <TableCell></TableCell>
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    )}
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.sender}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.sender}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.receiver}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.receiver}</span>
+                      </Tooltip>
+                      
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.coreValue}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.coreValue}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>{row.rewardPoints}</p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>{row.rewardPoints}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>
+                            {row.date == undefined
+                              ? row.date
+                              : new Date(row.date).toLocaleString()}
+                          </p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>
+                          {row.date == undefined
+                            ? row.date
+                            : new Date(row.date).toLocaleString()}
+                        </span>
+                      </Tooltip>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -489,7 +476,7 @@ export default function AppreciationTable(props: IPropsTable) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[2, 5, 7]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -498,7 +485,6 @@ export default function AppreciationTable(props: IPropsTable) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <DeleteDialog open={open} setOpen={setOpen} id={id} />
     </Box>
   );
 }

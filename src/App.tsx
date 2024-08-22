@@ -1,7 +1,7 @@
 import "./App.css";
 import Login from "./login";
 import { ToastContainer } from "react-toastify";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Appreciations from "./appreciations";
 import { useDispatch } from "react-redux";
 import { getAuthToken } from "./login/slice";
