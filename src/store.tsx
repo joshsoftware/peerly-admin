@@ -25,7 +25,7 @@ export const store = configureStore({
 
   middleware: (getDefaultMiddleware) =>
 
-    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware).concat(badgesSlice.middleware).concat(coreValueSlice.middleware),
+    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware).concat(badgesSlice.middleware).concat(coreValueSlice.middleware).concat(homeSlice.middleware),
 
 });
 
