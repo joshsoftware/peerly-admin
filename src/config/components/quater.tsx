@@ -27,7 +27,7 @@ export default function QuaterTable() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Quater No</TableCell>
+            <TableCell>Quarter No</TableCell>
             <TableCell align="right">Start Date</TableCell>
             <TableCell align="right">End Date</TableCell>
           </TableRow>
