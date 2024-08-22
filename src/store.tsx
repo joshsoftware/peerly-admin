@@ -3,6 +3,7 @@ import { loginApiSlice } from './login/apiSlice.tsx';
 import loginReducer from './login/slice';
 import sidebarReducer  from './permanentSidebar/slice.tsx';
 import { appreciationSlice } from './appreciations/apiSlice';
+import { configSlice } from './config/apiSlice.tsx';
 
 
 export const store = configureStore({
@@ -13,12 +14,13 @@ export const store = configureStore({
     sidebarStore: sidebarReducer,
     [loginApiSlice.reducerPath]: loginApiSlice.reducer,
     [appreciationSlice.reducerPath]: appreciationSlice.reducer,
+    [configSlice.reducerPath]: configSlice.reducer,
 
   },
 
   middleware: (getDefaultMiddleware) =>
 
-    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware),
+    getDefaultMiddleware().concat(loginApiSlice.middleware).concat(appreciationSlice.middleware).concat(configSlice.middleware),
 
 });
 

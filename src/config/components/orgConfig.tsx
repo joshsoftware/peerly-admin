@@ -6,13 +6,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { orgConfig } from "../types";
 import { useEffect, useState } from "react";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 function createData(
   id: number | undefined,
-  reward_quota_renewal_frequency: number | undefined
+  reward_quota_renewal_frequency: number | undefined,
+  updated_by: string | undefined
 ) {
-  return { id, reward_quota_renewal_frequency };
+  return { id, reward_quota_renewal_frequency, updated_by };
 }
 
 interface IProps {
@@ -29,7 +29,8 @@ export default function OrgConfigTable(props: IProps) {
     setRow(
       createData(
         props.orgConfig?.id,
-        props.orgConfig?.reward_quota_renewal_frequency
+        props.orgConfig?.reward_quota_renewal_frequency,
+        props.orgConfig?.updated_by,
       )
     );
   }, [props.orgConfig]);
@@ -48,9 +49,9 @@ export default function OrgConfigTable(props: IProps) {
                 ? `${row?.reward_quota_renewal_frequency} month`
                 : `${row?.reward_quota_renewal_frequency} months`}
             </TableCell>
-            <TableCell align="right" onClick={handleClickOpen} sx={{cursor:"pointer"}}>
+            {/* <TableCell align="right" onClick={handleClickOpen} sx={{cursor:"pointer"}}>
               <BorderColorIcon />
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableBody>
       </Table>
