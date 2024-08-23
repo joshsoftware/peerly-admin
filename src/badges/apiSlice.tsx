@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { badgesResponse, editBadgeReq, editBadgeResp } from "./types";
-import { baseUrl } from "../constants";
 
 export const badgesSlice = createApi({
   reducerPath: "badgesSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
   tagTypes: ["badges"],
   endpoints: (builder) => ({

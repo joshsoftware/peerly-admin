@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { editGradeReq, editGradeResp, editRenewalFrequencyReq, editRenewalFrequencyResp, gradesResponse, orgConfigResponse } from "./types";
-import { baseUrl } from "../constants";
 
 export const configSlice = createApi({
   reducerPath: "configSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
   tagTypes: ["gradesConfig","orgConfig"],
   endpoints: (builder) => ({

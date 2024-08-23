@@ -1,27 +1,26 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { userLoginBody, userLoginResp } from './types'
-import { baseUrl } from '../constants'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { userLoginBody, userLoginResp } from "./types";
 
 export const loginApiSlice = createApi({
-  reducerPath: 'loginSlice',
+  reducerPath: "loginSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
-  tagTypes: ['Login'],
+  tagTypes: ["Login"],
   endpoints: (builder) => ({
     adminLogin: builder.mutation<userLoginResp, Partial<userLoginBody>>({
       query: (payload) => ({
-        url: '/admin/login',
-        method: 'POST',
+        url: "/admin/login",
+        method: "POST",
         body: payload,
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'Accept-Version': 'application/vnd.peerly.v1'
+          "Content-type": "application/json; charset=UTF-8",
+          "Accept-Version": "application/vnd.peerly.v1",
         },
-      }),   
-      invalidatesTags: ['Login'],
+      }),
+      invalidatesTags: ["Login"],
     }),
   }),
-})
+});
 
-export const { useAdminLoginMutation } = loginApiSlice
+export const { useAdminLoginMutation } = loginApiSlice;

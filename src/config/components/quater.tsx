@@ -22,6 +22,7 @@ const rows = [
 ];
 
 export default function QuaterTable() {
+  // console.log("Base url -> ", process.env )
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

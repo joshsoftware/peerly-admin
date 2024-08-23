@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { coreValuesResp } from "./types";
-import { baseUrl } from "../constants";
 
 export const coreValueSlice = createApi({
   reducerPath: "coreValueSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
   tagTypes: ["coreValues"],
   endpoints: (builder) => ({

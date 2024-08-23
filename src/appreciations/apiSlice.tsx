@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { moderationReq, moderationResponse, response } from "./types";
-import { baseUrl } from "../constants";
 
 export const appreciationSlice = createApi({
   reducerPath: "appreciationSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
   tagTypes: ["appreciation", "reported", "moderation"],
   endpoints: (builder) => ({

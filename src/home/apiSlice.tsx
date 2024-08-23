@@ -1,11 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { listUsersResp, sendNotificationReq, sendNotificationResponse } from "./types";
-import { baseUrl } from "../constants";
 
 export const homeSlice = createApi({
   reducerPath: "homeSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
+    baseUrl: import.meta.env.VITE_BASE_URL,
   }),
   tagTypes: ["downloadReport", "users"],
   endpoints: (builder) => ({
