@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useGetUsersQuery, useSendNotificationMutation } from '../apiSlice';
+import { useSendNotificationMutation } from '../apiSlice';
 import { sendNotificationReq } from '../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';

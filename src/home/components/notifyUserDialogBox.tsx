@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useGetUsersQuery, useSendNotificationMutation } from "../apiSlice";
-import { sendNotificationReq, user, userDropdown } from "../types";
+import { sendNotificationReq, userDropdown } from "../types";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { toast } from "react-toastify";
@@ -31,7 +31,7 @@ export default function NotifiyUserDialog(props: IProps) {
   const [selectedUser, setSelectedUser] = React.useState<userDropdown | null>();
 
 
-  const { data, isError, isFetching } = useGetUsersQuery({
+  const { data } = useGetUsersQuery({
     page: 1,
     page_size: 400,
     authToken: authToken
@@ -101,7 +101,7 @@ export default function NotifiyUserDialog(props: IProps) {
             disablePortal
             options={users}
             value={selectedUser}
-            onChange={(event, newValue) => setSelectedUser(newValue)}
+            onChange={(_, newValue) => setSelectedUser(newValue)}
             renderInput={(params) => (
               <TextField {...params} label="User" id="user" name="user" required />
             )}

@@ -21,9 +21,6 @@ interface IProps {
 }
 
 export default function OrgConfigTable(props: IProps) {
-  const handleClickOpen = () => {
-    props.setOpen(true);
-  };
   const [row, setRow] = useState<orgConfig>();
   useEffect(() => {
     setRow(
@@ -49,9 +46,6 @@ export default function OrgConfigTable(props: IProps) {
                 ? `${row?.reward_quota_renewal_frequency} month`
                 : `${row?.reward_quota_renewal_frequency} months`}
             </TableCell>
-            {/* <TableCell align="right" onClick={handleClickOpen} sx={{cursor:"pointer"}}>
-              <BorderColorIcon />
-            </TableCell> */}
           </TableRow>
         </TableBody>
       </Table>

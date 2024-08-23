@@ -180,12 +180,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  setPage: (value: number | ((prevVar: number) => number)) => void;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar() {
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
   );
@@ -256,7 +251,6 @@ export default function AppreciationTable(props: IPropsTable) {
   }, [props.response]);
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
     property: keyof Data
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -273,7 +267,7 @@ export default function AppreciationTable(props: IPropsTable) {
     setSelected([]);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
@@ -299,7 +293,7 @@ export default function AppreciationTable(props: IPropsTable) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
+        <EnhancedTableToolbar />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -311,7 +305,7 @@ export default function AppreciationTable(props: IPropsTable) {
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
+              onRequestSort={(_, x) => handleRequestSort(x)}
               rowCount={rows.length}
             />
             <TableBody>
@@ -473,7 +467,7 @@ export default function AppreciationTable(props: IPropsTable) {
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          onPageChange={handleChangePage}
+          onPageChange={(_, newPage) => handleChangePage(newPage)}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
