@@ -52,7 +52,6 @@ const HomeComponent = () => {
           setOpenNotifyAll={setOpenNotifyAll}
           setOpenNotifyUser={setOpenNotifyUser}
         />
-        {/* <DownloadExcelCard /> */}
       </Box>
       <NotifiyAllDialog open={openNotifyAll} setOpen={setOpenNotifyAll} />
       <NotifiyUserDialog open={openNotifyUser} setOpen={setOpenNotifyUser} />

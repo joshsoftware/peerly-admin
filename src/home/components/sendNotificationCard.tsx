@@ -29,9 +29,8 @@ export default function NotificationCard(props: IProps) {
   };
 
   return (
-    <Box sx={{ minWidth: 160, margin: "20px", height: "150px" }}>
+    <Box sx={{ minWidth: 160, margin: "10px", height: "150px" }}>
       <Card
-        variant="outlined"
         sx={{
           height: "150px",
           display: "flex",

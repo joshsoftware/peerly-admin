@@ -9,8 +9,7 @@ interface IProps {
 
 export default function AppreciationCountCard(props: IProps) {
   return (
-    <Card sx={{ width: "210px", margin: "20px", height: "150px" }}>
-      <CardActionArea>
+    <Card sx={{ width: "210px", margin: "10px", height: "150px" }}>
         <CardContent>
           <Typography
             variant="h3"
@@ -28,7 +27,6 @@ export default function AppreciationCountCard(props: IProps) {
             Appreciation count for the quater
           </Typography>
         </CardContent>
-      </CardActionArea>
     </Card>
   );
 }
