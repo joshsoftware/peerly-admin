@@ -34,8 +34,8 @@ export default function CoreValuesTable(props: IProps) {
         <TableHead>
           <TableRow>
             <TableCell sx={{ paddingRight: "10px" }}>Sr No</TableCell>
-            <TableCell align="right">CoreValue</TableCell>
-            <TableCell align="right">Description</TableCell>
+            <TableCell align="left">CoreValue</TableCell>
+            <TableCell align="left">Description</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -47,8 +47,8 @@ export default function CoreValuesTable(props: IProps) {
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
+              <TableCell align="left">{row.name}</TableCell>
+              <TableCell align="left">{row.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>

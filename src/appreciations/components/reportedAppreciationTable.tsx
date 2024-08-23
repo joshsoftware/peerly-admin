@@ -210,7 +210,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.id == "description" ? "left" : "right"}
+            // align={headCell.id == "description" ? "left" : "right"}
+            align="left"
             padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -230,8 +231,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           </TableCell>
         ))}
 
-        <TableCell>Delete</TableCell>
-        <TableCell>Resolve</TableCell>
+        <TableCell align="left">Delete</TableCell>
+        <TableCell align="left">Resolve</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -276,14 +277,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         justifyContent: "end",
       }}
     >
-      {/* <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        Appreciations
-      </Typography> */}
 
       <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
@@ -398,7 +391,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
 
   return (
     <Box sx={{ width: "85%", position: "fixed" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "98%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} setPage={setPage} />
         <TableContainer>
           <Table
@@ -430,6 +423,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       id={labelId}
                       scope="row"
                       padding="normal"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -448,7 +442,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       </Tooltip>
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -467,7 +461,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       </Tooltip>
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -487,7 +481,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -507,7 +501,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -527,7 +521,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -547,7 +541,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -567,7 +561,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -591,7 +585,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                    
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -612,7 +606,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -631,9 +625,9 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       </Tooltip>
                       
                     </TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
+                    <TableCell align="left">{row.status}</TableCell>
                     {row.status === "reported" ? (
-                      <TableCell align="right" padding="checkbox">
+                      <TableCell align="center" padding="checkbox">
                         <IconButton
                           onClick={() => handleClickOpenDelete(row.id)}
                         >
@@ -646,7 +640,7 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
                       </>
                     )}
                     {row.status === "reported" ? (
-                      <TableCell align="left" padding="checkbox">
+                      <TableCell align="center" padding="checkbox">
                         <IconButton
                           onClick={() => handleClickOpenResolve(row.id)}
                         >

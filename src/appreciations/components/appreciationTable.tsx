@@ -157,7 +157,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.id == "description" ? "left" : "right"}
+            align="left"
             padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -220,14 +220,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         minHeight: "40px"
       }}
     >
-      {/* <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        Appreciations
-      </Typography> */}
 
       <Button sx={{ width: "215px" }} onClick={handleClick}>
         Download Report
@@ -356,7 +348,7 @@ export default function AppreciationTable(props: IPropsTable) {
                       </Tooltip>
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -376,7 +368,7 @@ export default function AppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -396,7 +388,7 @@ export default function AppreciationTable(props: IPropsTable) {
                       
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -415,7 +407,7 @@ export default function AppreciationTable(props: IPropsTable) {
                       </Tooltip>
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
@@ -434,7 +426,7 @@ export default function AppreciationTable(props: IPropsTable) {
                       </Tooltip>
                     </TableCell>
                     <TableCell
-                      align="right"
+                      align="left"
                       sx={{
                         maxWidth: 200,
                         overflow: "hidden",
