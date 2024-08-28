@@ -16,9 +16,9 @@ const CoreValuesComponent = () => {
   useEffect(()=>{
     console.log("authtoken -> ",authToken)
     if(authToken === ""){
-      navigate("/login")
+      navigate("/peerly-admin/login")
     }else{
-      navigate("/core_values")
+      navigate("/peerly-admin/core_values")
     }
   },[authToken])
   return (

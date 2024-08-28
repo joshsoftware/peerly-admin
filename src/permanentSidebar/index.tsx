@@ -29,7 +29,7 @@ export default function PermanentDrawerLeft(props: IProps) {
     <DiamondIcon />,
     <AssuredWorkloadIcon />,
   ];
-  const routeList = ["/", "/appreciations", "/badges", "/core_values", "/config"];
+  const routeList = ["/peerly-admin/", "/peerly-admin/appreciations", "/peerly-admin/badges", "/peerly-admin/core_values", "/peerly-admin/config"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const setRoute = (index: number) => () => {

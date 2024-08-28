@@ -19,9 +19,9 @@ const BadgesComponent = () => {
   useEffect(()=>{
     console.log("authtoken -> ",authToken)
     if(authToken === ""){
-      navigate("/login")
+      navigate("/peerly-admin/login")
     }else{
-      navigate("/badges")
+      navigate("/peerly-admin/badges")
     }
   },[authToken])
   return (

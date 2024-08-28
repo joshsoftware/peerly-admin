@@ -69,9 +69,9 @@ export function AppTabs() {
   useEffect(() => {
     console.log("authtoken -> ", authToken);
     if (authToken === "") {
-      navigate("/login");
+      navigate("/peerly-admin/login");
     } else {
-      navigate("/appreciations");
+      navigate("/peerly-admin/appreciations");
     }
   }, [authToken]);
 

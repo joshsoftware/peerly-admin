@@ -14,27 +14,27 @@ import CoreValues from "./coreValues";
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/peerly-admin/",
       element: <Home />,
     },
     {
-      path: "/login",
+      path: "/peerly-admin/login",
       element: <Login />,
     },
     {
-      path: "/appreciations",
+      path: "/peerly-admin/appreciations",
       element: <Appreciations />,
     },
     {
-      path: "/config",
+      path: "/peerly-admin/config",
       element: <Config />,
     },
     {
-      path: "/badges",
+      path: "/peerly-admin/badges",
       element: <Badges />,
     },
     {
-      path: "/core_values",
+      path: "/peerly-admin/core_values",
       element: <CoreValues />,
     },
   ]);

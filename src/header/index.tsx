@@ -9,7 +9,7 @@ export default function Header() {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/peerly-admin/login");
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
