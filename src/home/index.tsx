@@ -28,9 +28,9 @@ const HomeComponent = () => {
   useEffect(() => {
     console.log("authtoken -> ", authToken);
     if (authToken === "") {
-      navigate("/peerly-admin/login");
+      navigate("/login");
     } else {
-      navigate("/peerly-admin/");
+      navigate("/");
     }
   }, [authToken]);
   return (

@@ -67,9 +67,9 @@ export function ConfigTabs() {
   useEffect(() => {
     console.log("authtoken -> ", authToken);
     if (authToken === "") {
-      navigate("/peerly-admin/login");
+      navigate("/login");
     } else {
-      navigate("/peerly-admin/config");
+      navigate("/config");
     }
   }, [authToken]);
 
