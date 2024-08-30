@@ -30,14 +30,15 @@ task :deploy do
 
 			# Clone the repository if it doesnt exist
 			invoke :'git:clone'
+			invoke :'deploy:link_shared_paths'
 
 			# Install dependencies and build the project
 			command 'npm install'
 			command 'npm run build'
 
-			# on :launch do
-				# command 'sudo nginx reload'
-			# end
+			on :launch do
+				command 'sudo systemctl reload nignx'
+			end
 		
 	end
 end
