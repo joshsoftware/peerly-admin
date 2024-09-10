@@ -12,6 +12,13 @@ set :shared_files, [
   '.env'
 ]
 
+task :production do
+	set :deploy_to, '/www/peerly-admin'
+	set :domain, 'pg-stage-intranet.joshsoftware.com' #Replace with production domain or ip
+	set :branch, 'Dev'
+	command %{source ~/.nvm/nvm.sh}
+end
+
 task :staging do
   set :deploy_to, '/www/peerly-admin'
   set :domain, 'pg-stage-intranet.joshsoftware.com'
