@@ -23,7 +23,7 @@ export default function AppreciationCountCard(props: IProps) {
             component="div"
             sx={{ textAlign: "center" }}
           >
-            Appreciation count for the quater
+            Appreciation count for the quarter
           </Typography>
         </CardContent>
     </Card>
