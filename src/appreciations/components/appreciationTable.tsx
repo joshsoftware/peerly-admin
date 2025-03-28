@@ -24,6 +24,7 @@ interface Data {
   receiver: string;
   coreValue: string;
   rewardPoints: number;
+  quarter: number;
   date: number;
 }
 
@@ -34,6 +35,7 @@ function createData(
   receiver: string,
   coreValue: string,
   rewardPoints: number,
+  quarter: number,
   date: number
 ): Data {
   return {
@@ -43,6 +45,7 @@ function createData(
     receiver,
     coreValue,
     rewardPoints,
+    quarter,
     date,
   };
 }
@@ -135,6 +138,12 @@ const headCells: HeadCell[] = [
     numeric: true,
     disablePadding: false,
     label: "Reward Points",
+  },
+  {
+    id: "quarter",
+    numeric: true,
+    disablePadding: false,
+    label: "Quarter",
   },
   {
     id: "date",
@@ -244,6 +253,7 @@ export default function AppreciationTable(props: IPropsTable) {
           item.receiver_first_name + " " + item.receiver_last_name,
           item.core_value_name,
           item.total_reward_points,
+          item.quarter,
           item.created_at
         ),
       ]);
@@ -417,6 +427,29 @@ export default function AppreciationTable(props: IPropsTable) {
                         placement="bottom-start"
                       >
                         <span>{row.rewardPoints}</span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Tooltip
+                        title={
+                          <p style={{ fontSize: "15px" }}>
+                            {row.quarter}
+                          </p>
+                        }
+                        sx={{ fontSize: "20px" }}
+                        placement="bottom-start"
+                      >
+                        <span>
+                          {`Q${row.quarter}`}
+                        </span>
                       </Tooltip>
                     </TableCell>
                     <TableCell
