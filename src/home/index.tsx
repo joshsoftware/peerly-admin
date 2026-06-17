@@ -4,6 +4,8 @@ import PermanentDrawerLeft from "../permanentSidebar";
 import AppreciationCountCard from "./components/appreciationCountCard";
 import { RootState } from "../store";
 import NotificationCard from "./components/sendNotificationCard";
+import DynamicEngagersReportCard from "./components/dynamicEngagersReportCard";
+import DynamicEngagersReportDialog from "./components/dynamicEngagersReportDialog";
 // import DownloadExcelCard from "./components/downloadExcel";
 import { useEffect, useState } from "react";
 import NotifiyAllDialog from "./components/notifyAllDilogBox";
@@ -14,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 const HomeComponent = () => {
   const [openNotifyAll, setOpenNotifyAll] = useState(false);
   const [openNotifyUser, setOpenNotifyUser] = useState(false);
+  const [openDynamicEngagers, setOpenDynamicEngagers] = useState(false);
 
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
@@ -52,9 +55,11 @@ const HomeComponent = () => {
           setOpenNotifyAll={setOpenNotifyAll}
           setOpenNotifyUser={setOpenNotifyUser}
         />
+        <DynamicEngagersReportCard setOpen={setOpenDynamicEngagers} />
       </Box>
       <NotifiyAllDialog open={openNotifyAll} setOpen={setOpenNotifyAll} />
       <NotifiyUserDialog open={openNotifyUser} setOpen={setOpenNotifyUser} />
+      <DynamicEngagersReportDialog open={openDynamicEngagers} setOpen={setOpenDynamicEngagers} />
     </>
   );
 };

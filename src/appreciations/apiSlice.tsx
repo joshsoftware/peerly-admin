@@ -80,6 +80,17 @@ export const appreciationSlice = createApi({
         responseHandler: (response) => response.arrayBuffer(),
       }),
     }),
+
+    dynamicEngagersReport: builder.query<ArrayBuffer, { quarter: number; year: number; authToken: string }>({
+      query: ({ quarter, year, authToken }) => ({
+        url: `/admin/dynamic_engagers_report?quarter=${quarter}&year=${year}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        responseHandler: (response) => response.arrayBuffer(),
+      }),
+    }),
   }),
 });
 
@@ -90,4 +101,6 @@ export const {
   useAppreciationReportQuery,
   useReportedAppreciationReportQuery,
   useResolveAppreciationMutation,
+  useLazyDynamicEngagersReportQuery,
 } = appreciationSlice;
+
