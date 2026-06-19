@@ -40,13 +40,6 @@ const QUARTER_LABELS: Record<number, string> = {
   4: 'Q4',
 };
 
-function getQuarterOptions(year: number): QuarterOption[] {
-  return Object.entries(QUARTER_LABELS).map(([q, name]) => ({
-    label: name,
-    quarter: Number(q),
-  }));
-}
-
 // Returns only quarters that have completed for the given start year (e.g., 2026)
 function getAvailableQuarterOptions(startYear: number): QuarterOption[] {
   const now = new Date();
