@@ -2,7 +2,8 @@ import {
   useGetAppreciationsQuery,
   useGetReportedAppreciationsQuery,
 } from "./apiSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "react-router-dom";
@@ -55,16 +56,33 @@ export function AppTabs() {
   const authToken = useSelector(
     (state: RootState) => state.loginStore.authToken
   );
+
+  // Quarter/year filter state for the Appreciations tab
+  const [apprQuarter, setApprQuarter] = useState<number | undefined>(undefined);
+  const [apprYear, setApprYear] = useState<number | undefined>(undefined);
+
+  // Quarter/year filter state for the Reported Appreciations tab
+  const [repApprQuarter, setRepApprQuarter] = useState<number | undefined>(undefined);
+  const [repApprYear, setRepApprYear] = useState<number | undefined>(undefined);
+
   const { data: appreciations, isError: listAppreciationsError } =
     useGetAppreciationsQuery({
       page: 1,
       page_size: 1000,
       authToken: authToken,
+      // Only pass when both are set; otherwise the backend returns all records
+      quarter: apprQuarter,
+      year: apprYear,
     });
+
   const {
     data: reportedAppreciations,
     isError: listReportedAppreciationsError,
-  } = useGetReportedAppreciationsQuery({ authToken: authToken });
+  } = useGetReportedAppreciationsQuery({
+    authToken: authToken,
+    quarter: repApprQuarter,
+    year: repApprYear,
+  });
 
   useEffect(() => {
     console.log("authtoken -> ", authToken);
@@ -93,6 +111,10 @@ export function AppTabs() {
         ) : (
           <AppreciationTable
             response={appreciations?.data.appreciations}
+            onFilterChange={(quarter, year) => {
+              setApprQuarter(quarter);
+              setApprYear(year);
+            }}
           />
         )}
       </CustomTabPanel>
@@ -100,6 +122,10 @@ export function AppTabs() {
         {!listReportedAppreciationsError ? (
           <ReportedAppreciationTable
             response={reportedAppreciations?.data.appreciations}
+            onFilterChange={(quarter, year) => {
+              setRepApprQuarter(quarter);
+              setRepApprYear(year);
+            }}
           />
         ) : (
           <></>
