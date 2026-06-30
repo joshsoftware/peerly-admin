@@ -15,12 +15,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IPropsTable } from "../types";
 import DeleteDialog from "./deleteDialogueBox";
-import { Button, Tooltip } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Button, FormControl, InputLabel, MenuItem, Select, Tooltip } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import { useReportedAppreciationReportQuery } from "../apiSlice";
-import { RootState } from "../../store";
 import ResolveDialog from "./resolveDialogueBox";
+import ReportedAppreciationReportDialog from "./reportedAppreciationReportDialog";
 
 interface Data {
   id: number;
@@ -210,7 +208,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            // align={headCell.id == "description" ? "left" : "right"}
             align="left"
             padding="normal"
             sortDirection={orderBy === headCell.id ? order : false}
@@ -238,54 +235,129 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-function EnhancedTableToolbar() {
-  const authToken = useSelector(
-    (state: RootState) => state.loginStore.authToken
-  );
-  const { data: reportedAppreciations, error: reportedAppreciationError } =
-    useReportedAppreciationReportQuery({ authToken });
-  const handleClick = () => {
-    if (reportedAppreciations) {
-      // Create a URL for the Blob
-      const blob = new Blob([reportedAppreciations], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
+interface EnhancedTableToolbarProps {
+  /** Currently selected financial year start (e.g. 2025), or undefined for "All" */
+  selectedYear: number | undefined;
+  /** Currently selected quarter (1–4), or undefined for "All" */
+  selectedQuarter: number | undefined;
+  onYearChange: (year: number | undefined) => void;
+  onQuarterChange: (quarter: number | undefined) => void;
+}
 
-      // Create a link element and trigger a download
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ReportedAppreciaitionsReport.xlsx"; // Set the desired filename
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } else if (reportedAppreciationError) {
-      console.error("Error downloading the report:", reportedAppreciationError);
-    }
-  };
+// Financial year options starting from 2024
+const TOOLBAR_YEARS = Array.from(
+  { length: new Date().getFullYear() - 2024 + 1 },
+  (_, i) => 2024 + i
+);
+
+const QUARTER_NAMES: Record<number, string> = {
+  1: 'Q1 (Mar–May)',
+  2: 'Q2 (Jun–Aug)',
+  3: 'Q3 (Sep–Nov)',
+  4: 'Q4 (Dec–Feb)',
+};
+
+function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+  const { selectedYear, selectedQuarter, onYearChange, onQuarterChange } = props;
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        justifyContent: "end",
-      }}
-    >
+    <>
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          justifyContent: "space-between",
+          minHeight: "56px",
+          gap: 2,
+        }}
+      >
+        {/* Quarter/year search filters */}
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
+            <InputLabel id="rep-appr-filter-year-label" shrink>Year</InputLabel>
+            <Select
+              labelId="rep-appr-filter-year-label"
+              id="rep-appr-filter-year-select"
+              value={selectedYear !== undefined ? String(selectedYear) : ''}
+              label="Year"
+              onChange={(e) => {
+                const val = e.target.value as string;
+                onYearChange(val ? Number(val) : undefined);
+                // Reset quarter filter when year changes
+                onQuarterChange(undefined);
+              }}
+              displayEmpty
+            >
+              <MenuItem value="">All Years</MenuItem>
+              {TOOLBAR_YEARS.map((y) => (
+                <MenuItem key={y} value={String(y)}>
+                  {`${y}–${y + 1}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-      <Button sx={{ width: "215px" }} onClick={handleClick}>
-        Download Report
-      </Button>
-    </Toolbar>
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }} disabled={!selectedYear}>
+            <InputLabel id="rep-appr-filter-quarter-label" shrink>Quarter</InputLabel>
+            <Select
+              labelId="rep-appr-filter-quarter-label"
+              id="rep-appr-filter-quarter-select"
+              value={selectedQuarter !== undefined ? String(selectedQuarter) : ''}
+              label="Quarter"
+              onChange={(e) => {
+                const val = e.target.value as string;
+                onQuarterChange(val ? Number(val) : undefined);
+              }}
+              displayEmpty
+            >
+              <MenuItem value="">All Quarters</MenuItem>
+              {Object.entries(QUARTER_NAMES).map(([q, label]) => (
+                <MenuItem key={q} value={q}>{label}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Button
+          sx={{ width: "215px", flexShrink: 0 }}
+          variant="outlined"
+          onClick={() => setReportDialogOpen(true)}
+        >
+          Download Report
+        </Button>
+      </Toolbar>
+
+      {/* Report download dialog — allows selecting quarter/year for the Excel export */}
+      <ReportedAppreciationReportDialog open={reportDialogOpen} setOpen={setReportDialogOpen} />
+    </>
   );
 }
-export default function ReportedAppreciationTable(props: IPropsTable) {
+
+export default function ReportedAppreciationTable(props: IPropsTable & {
+  /** Called whenever the quarter/year filter selection changes */
+  onFilterChange?: (quarter: number | undefined, year: number | undefined) => void;
+}) {
   const [order, setOrder] = useState<Order>("desc");
   const [orderBy, setOrderBy] = useState<keyof Data>("date");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
   const [rows, setRows] = useState<Data[]>([]);
+  // Quarter/year filter state — drives both the table display and the parent API query
+  const [filterYear, setFilterYear] = useState<number | undefined>(undefined);
+  const [filterQuarter, setFilterQuarter] = useState<number | undefined>(undefined);
+
+  const handleYearChange = (year: number | undefined) => {
+    setFilterYear(year);
+    setFilterQuarter(undefined);
+    props.onFilterChange?.(undefined, year);
+  };
+
+  const handleQuarterChange = (quarter: number | undefined) => {
+    setFilterQuarter(quarter);
+    props.onFilterChange?.(quarter, filterYear);
+  };
 
   useEffect(() => {
     const data = props.response;
@@ -386,7 +458,12 @@ export default function ReportedAppreciationTable(props: IPropsTable) {
   return (
     <Box sx={{ width: "85%", position: "fixed" }}>
       <Paper sx={{ width: "98%", mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar
+          selectedYear={filterYear}
+          selectedQuarter={filterQuarter}
+          onYearChange={handleYearChange}
+          onQuarterChange={handleQuarterChange}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
