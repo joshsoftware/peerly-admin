@@ -236,8 +236,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
               onChange={(e) => {
                 const val = e.target.value as string;
                 onYearChange(val ? Number(val) : undefined);
-                // Reset quarter filter when year changes
-                onQuarterChange(undefined);
+                // Quarter reset is handled inside handleYearChange via onQuarterChange
               }}
               displayEmpty
             >

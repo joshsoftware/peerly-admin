@@ -11,8 +11,11 @@ export const appreciationSlice = createApi({
     getAppreciations: builder.query<response, { page: number; page_size: number; authToken: string; quarter?: number; year?: number }>({
       query: ({ page, page_size, authToken, quarter, year }) => {
         let url = `/appreciations?page=${page}&page_size=${page_size}`;
-        if (quarter && year) {
-          url += `&quarter=${quarter}&year=${year}`;
+        if (year) {
+          url += `&year=${year}`;
+          if (quarter) {
+            url += `&quarter=${quarter}`;
+          }
         }
         return {
           url,
@@ -28,8 +31,11 @@ export const appreciationSlice = createApi({
     getReportedAppreciations: builder.query<response, { authToken: string; quarter?: number; year?: number }>({
       query: ({ authToken, quarter, year }) => {
         let url = `/report_appreciations`;
-        if (quarter && year) {
-          url += `?quarter=${quarter}&year=${year}`;
+        if (year) {
+          url += `?year=${year}`;
+          if (quarter) {
+            url += `&quarter=${quarter}`;
+          }
         }
         return {
           url,
