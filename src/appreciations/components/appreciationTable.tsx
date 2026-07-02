@@ -301,33 +301,36 @@ export default function AppreciationTable(props: IPropsTable & {
   const handleYearChange = (year: number | undefined) => {
     setFilterYear(year);
     setFilterQuarter(undefined);
+    setPage(0);
     props.onFilterChange?.(undefined, year);
   };
 
   const handleQuarterChange = (quarter: number | undefined) => {
     setFilterQuarter(quarter);
+    setPage(0);
     props.onFilterChange?.(quarter, filterYear);
   };
 
   useEffect(() => {
     const data = props.response;
-    setRows([]);
+    if (!data) {
+      setRows([]);
+      return;
+    }
 
-    data?.map((item) => {
-      return setRows((prevData) => [
-        ...prevData,
-        createData(
-          item.id,
-          item.description,
-          item.sender_first_name + " " + item.sender_last_name,
-          item.receiver_first_name + " " + item.receiver_last_name,
-          item.core_value_name,
-          item.total_reward_points,
-          item.quarter,
-          item.created_at
-        ),
-      ]);
-    });
+    const newRows = data.map((item) =>
+      createData(
+        item.id,
+        item.description,
+        item.sender_first_name + " " + item.sender_last_name,
+        item.receiver_first_name + " " + item.receiver_last_name,
+        item.core_value_name,
+        item.total_reward_points,
+        item.quarter,
+        item.created_at
+      )
+    );
+    setRows(newRows);
   }, [props.response]);
 
   const handleRequestSort = (
