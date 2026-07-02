@@ -350,19 +350,24 @@ export default function ReportedAppreciationTable(props: IPropsTable & {
   const handleYearChange = (year: number | undefined) => {
     setFilterYear(year);
     setFilterQuarter(undefined);
+    setPage(0);
     props.onFilterChange?.(undefined, year);
   };
 
   const handleQuarterChange = (quarter: number | undefined) => {
     setFilterQuarter(quarter);
+    setPage(0);
     props.onFilterChange?.(quarter, filterYear);
   };
 
   useEffect(() => {
     const data = props.response;
-    setRows([]);
+    if (!data) {
+      setRows([]);
+      return;
+    }
 
-    data?.map((item) => {
+    const newRows = data.map((item) => {
       const updatedItem = {
         ...item,
         reported_by_first_name: item.reported_by_first_name || "",
@@ -372,31 +377,29 @@ export default function ReportedAppreciationTable(props: IPropsTable & {
         is_valid: item.is_valid === undefined ? true : item.is_valid,
       };
 
-      return setRows((prevData) => [
-        ...prevData,
-        createData(
-          updatedItem.id,
-          updatedItem.description,
-          updatedItem.sender_first_name + " " + updatedItem.sender_last_name,
-          updatedItem.receiver_first_name +
-            " " +
-            updatedItem.receiver_last_name,
-          updatedItem.core_value_name,
-          updatedItem.total_reward_points,
-          updatedItem.created_at,
-          updatedItem.reported_by_first_name +
-            " " +
-            updatedItem.reported_by_last_name,
-          updatedItem.reporting_comment,
-          updatedItem.reported_at,
-          updatedItem.moderated_by_first_name +
-            " " +
-            updatedItem.moderated_by_last_name,
-          updatedItem.moderator_comment,
-          updatedItem.status
-        ),
-      ]);
+      return createData(
+        updatedItem.id,
+        updatedItem.description,
+        updatedItem.sender_first_name + " " + updatedItem.sender_last_name,
+        updatedItem.receiver_first_name +
+          " " +
+          updatedItem.receiver_last_name,
+        updatedItem.core_value_name,
+        updatedItem.total_reward_points,
+        updatedItem.created_at,
+        updatedItem.reported_by_first_name +
+          " " +
+          updatedItem.reported_by_last_name,
+        updatedItem.reporting_comment,
+        updatedItem.reported_at,
+        updatedItem.moderated_by_first_name +
+          " " +
+          updatedItem.moderated_by_last_name,
+        updatedItem.moderator_comment,
+        updatedItem.status
+      );
     });
+    setRows(newRows);
   }, [props.response]);
 
   const handleRequestSort = (
